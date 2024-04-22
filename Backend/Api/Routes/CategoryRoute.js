@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Category } from "../Modals/Category.js";
 
 const CategoryRouter = Router();
 
