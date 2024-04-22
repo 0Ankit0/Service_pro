@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
 
 const CategorySchema = new mongoose.Schema({
-    name: {
+    Name: {
         type: String,
         required: true,
         unique: true
     },
-    description: {
+    Description: {
         type: String
     },
     Services: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Service'
     }],
-    image: {
+    Image: {
         type: String
     }
 }, { timestamps: true });
