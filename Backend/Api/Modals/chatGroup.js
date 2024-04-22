@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const chatGroupSchema = new mongoose.Schema({
-    name: {
+    Name: {
         type: String,
         required: true
     },
-    members: [{
+    Members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }]
