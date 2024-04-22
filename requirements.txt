@@ -1,0 +1,5 @@
+Requirements:
+
+1. Required "Role" field to be included in the resposne of the api: /user/login post method
+
+2. Required "Photo" field in the api: /user get method to store user's profile picture
