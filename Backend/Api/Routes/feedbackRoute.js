@@ -11,7 +11,7 @@ feedbackRouter.get('/', async (req, res) => {
 feedbackRouter.post('/add', async (req, res) => {
     try {
         const feedback = await Feedback.create({ ...req.body, UserId: req.user.id });
-        res.json(feedback);
+        res.json({ message: "Feedback added successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
@@ -20,7 +20,7 @@ feedbackRouter.post('/add', async (req, res) => {
 feedbackRouter.delete('/delete/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findByIdAndDelete(req.params.id);
-        res.json(feedback);
+        res.json({ message: "Feedback deleted successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
@@ -29,7 +29,7 @@ feedbackRouter.delete('/delete/:id', async (req, res) => {
 feedbackRouter.put('/update/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findByIdAndUpdate(req.params.id, req.body);
-        res.json(feedback);
+        res.json({ message: "Feedback updated successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
