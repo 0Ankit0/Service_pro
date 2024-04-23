@@ -20,7 +20,7 @@ requestRouter.post('/add', async (req, res) => {
 requestRouter.put('/update/:id', async (req, res) => {
     try {
         const request = await Request.findByIdAndUpdate(req.params.id, req.body);
-        res.json(request);
+        res.json({ message: "Request updated successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
@@ -29,7 +29,7 @@ requestRouter.put('/update/:id', async (req, res) => {
 requestRouter.delete('/delete/:id', async (req, res) => {
     try {
         const request = await Request.findByIdAndDelete(req.params.id);
-        res.json(request);
+        res.json({ message: "Request deleted successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }

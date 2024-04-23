@@ -11,7 +11,7 @@ serviceRouter.get('/', async (req, res) => {
 serviceRouter.post('/add', async (req, res) => {
     try {
         const service = await Service.create({ ...req.body, UserId: req.user.id });
-        res.json(service);
+        res.json({ message: "Service added successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
@@ -20,7 +20,7 @@ serviceRouter.post('/add', async (req, res) => {
 serviceRouter.put('/update/:id', async (req, res) => {
     try {
         const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(service);
+        res.json({ message: "Service updated successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
@@ -29,7 +29,7 @@ serviceRouter.put('/update/:id', async (req, res) => {
 serviceRouter.delete('/delete/:id', async (req, res) => {
     try {
         const service = await Service.findByIdAndDelete(req.params.id);
-        res.json(service);
+        res.json({ message: "Service deleted successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }

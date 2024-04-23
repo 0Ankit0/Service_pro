@@ -27,7 +27,7 @@ CategoryRouter.put("/update/:id", async (req, res) => {
             { $set: { "Services": req.body.Services } },
             { new: true } // to return updated document
         );
-        return res.status(201).json({ category });
+        return res.status(201).json({ message: "Category Updated Successfully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -35,7 +35,7 @@ CategoryRouter.put("/update/:id", async (req, res) => {
 CategoryRouter.delete("/delete/:id", async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
-        return res.status(200).json({ category });
+        return res.status(200).json({ message: "Category Deleted Successfully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
