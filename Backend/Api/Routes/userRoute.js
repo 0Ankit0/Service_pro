@@ -16,11 +16,6 @@ const limiter = rateLimit({
     }
 });
 
-userRouter.get('/', async (req, res) => { //this is /user/index page
-    var users = await User.find({}).lean().exec();
-    res.json(users);
-});
-
 userRouter.post('/login', limiter, async (req, res) => {
     try {
         const user = await User.findOne({ Email: req.body.Email }).exec();
