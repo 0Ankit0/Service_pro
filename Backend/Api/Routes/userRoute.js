@@ -20,7 +20,7 @@ userRouter.post('/login', limiter, async (req, res) => {
     try {
         const user = await User.findOne({ Email: req.body.Email }).exec();
         const isValid = await comparePassword(user.Password, req.body.Password);
-        if (!isValid) return res.status(status(401)).json({ message: "Invalid password" });
+        if (!isValid) return res.status(401).json({ message: "Invalid password" });
         const token = createJWT(user);
         res.status(200).json({ token: token, message: "Success" });
     } catch (error) {
@@ -36,6 +36,25 @@ userRouter.post('/signup', async (req, res) => {
         res.json(user);
     } catch (error) {
         res.json({ message: "Duplicate email" })
+    }
+});
+
+userRouter.get('/profile', async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).lean().exec();
+        res.json(user);
+    } catch (error) {
+        res.json({ message: "Error occurred" })
+    }
+});
+
+userRouter.put('/profile', async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.user._id, req.body
+            , { new: true });
+        res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+        res.json({ message: "Error occurred" })
     }
 });
 
