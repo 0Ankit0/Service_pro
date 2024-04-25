@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 const userRouter = Router();
 
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 15 minutes
+    windowMs: 1 * 60 * 1000, // 1 minute
     max: 5, // limit each IP to 5 requests per windowMs
     handler: function (req, res, /*next*/) {
         const retryAfter = Math.ceil(res.getHeaders()['retry-after'] / 60); // Get the Retry-After header and convert it to minutes
@@ -53,6 +53,15 @@ userRouter.put('/profile', async (req, res) => {
         const user = await User.findByIdAndUpdate(req.user._id, req.body
             , { new: true });
         res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+        res.json({ message: "Error occurred" })
+    }
+});
+
+userRouter.delete('/profile', async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.user._id, { Active: 0 });
+        res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }

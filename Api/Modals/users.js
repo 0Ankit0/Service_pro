@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema({
     Image: [{
         type: String
     }],
-    LastActive: {
-        type: Date, default: Date.now
+    Active: {
+        type: Number, default: 1
     },
 }, { timestamps: true }
 )
