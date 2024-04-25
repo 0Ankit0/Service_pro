@@ -22,7 +22,7 @@ userRouter.post('/login', limiter, async (req, res) => {
         const isValid = await comparePassword(user.Password, req.body.Password);
         if (!isValid) return res.status(401).json({ message: "Invalid password" });
         const token = createJWT(user);
-        res.status(200).json({ token: token, message: "Success" });
+        res.status(200).json({ token: token, message: "Success", Role: user.Role });
     } catch (error) {
         console.log(error);
         res.status(401).json({ token: "", message: "Error occurred" })
