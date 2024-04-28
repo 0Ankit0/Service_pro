@@ -1,5 +1,6 @@
 import { Service } from "../Modals/services.js";
 import { Router } from "express";
+import { protect } from "../Middleware/auth.js";
 
 const serviceRouter = Router();
 
@@ -8,7 +9,7 @@ serviceRouter.get('/', async (req, res) => {
     res.json(services);
 });
 
-serviceRouter.post('/add', async (req, res) => {
+serviceRouter.post('/add', protect, async (req, res) => {
     try {
         const service = await Service.create({ ...req.body, UserId: req.user.id });
         res.json({ message: "Service added successfully" });
@@ -17,7 +18,7 @@ serviceRouter.post('/add', async (req, res) => {
     }
 });
 
-serviceRouter.put('/update/:id', async (req, res) => {
+serviceRouter.put('/update/:id', protect, async (req, res) => {
     try {
         const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json({ message: "Service updated successfully" });
@@ -26,7 +27,7 @@ serviceRouter.put('/update/:id', async (req, res) => {
     }
 });
 
-serviceRouter.delete('/delete/:id', async (req, res) => {
+serviceRouter.delete('/delete/:id', protect, async (req, res) => {
     try {
         const service = await Service.findByIdAndDelete(req.params.id);
         res.json({ message: "Service deleted successfully" });

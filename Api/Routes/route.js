@@ -28,7 +28,7 @@ app.use('/uploads', express.static(uploadsDir));
 app.use('/upload', protect, uploadRouter);
 
 app.use('/mail', protect, mailRouter);
-app.use('/message', protect, messageRouter);
-app.use('/category', protect, CategoryRouter);
-app.use('/service', protect, serviceRouter);
+app.use('/message', messageRouter);
+app.use('/category', CategoryRouter);
+app.use('/service', serviceRouter);
 export default app;

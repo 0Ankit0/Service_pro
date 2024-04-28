@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Category } from "../Modals/Category.js";
+import { protect } from "../Middleware/auth.js";
 
 const CategoryRouter = Router();
 
@@ -12,7 +13,7 @@ CategoryRouter.get("/", async (req, res) => {
     }
 });
 
-CategoryRouter.post("/add", async (req, res) => {
+CategoryRouter.post("/add", protect, async (req, res) => {
     try {
         const category = await Category.create(req.body);
         return res.status(200).json({ category });
@@ -20,7 +21,7 @@ CategoryRouter.post("/add", async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 });
-CategoryRouter.put("/update/:id", async (req, res) => {
+CategoryRouter.put("/update/:id", protect, async (req, res) => {
     try {
         const category = await Category.findByIdAndUpdate(
             req.params.id,
@@ -32,7 +33,7 @@ CategoryRouter.put("/update/:id", async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 });
-CategoryRouter.delete("/delete/:id", async (req, res) => {
+CategoryRouter.delete("/delete/:id", protect, async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         return res.status(200).json({ message: "Category Deleted Successfully" });
