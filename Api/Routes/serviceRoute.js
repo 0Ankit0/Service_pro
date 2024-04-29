@@ -21,7 +21,7 @@ serviceRouter.post('/add', protect, async (req, res) => {
 serviceRouter.put('/update/:id', protect, async (req, res) => {
     try {
         const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json({ message: "Service updated successfully" });
+        res.json({ message: "Service updated successfully", data: service });
     } catch (error) {
         res.json({ message: "Error occurred" })
     }
