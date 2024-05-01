@@ -43,7 +43,7 @@ mailRouter.post('/send', async (req, res) => {
         res.send("Mail sent successfully");
     } catch (error) {
         console.error(error);
-        res.status(500).send("Failed to send mail");
+        res.status(400).send("Failed to send mail");
     }
 });
 mailRouter.post('/send-multiple', async (req, res) => {
@@ -84,7 +84,7 @@ mailRouter.post('/send-multiple', async (req, res) => {
         res.send("Mail sent successfully");
     } catch (error) {
         console.error(error);
-        res.status(500).send("Failed to send mail");
+        res.status(400).send("Failed to send mail");
     }
 });
 export default mailRouter;
