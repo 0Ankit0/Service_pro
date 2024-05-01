@@ -13,8 +13,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, 'uploads');
 
 router.get('/', async (req, res) => { //this is /upload/index page
-    const fileUrls = fs.readdirSync(uploadsDir).map(file => `http://localhost:8000/uploads/${file}`);
-    res.status(200).send(`List of stored files: ${fileUrls.join(", ")}`);
+    try {
+
+        const fileUrls = fs.readdirSync(uploadsDir).map(file => `http://localhost:8000/uploads/${file}`);
+        res.status(200).send(`List of stored files: ${fileUrls.join(", ")}`);
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
 });;
 
 
@@ -31,13 +36,23 @@ const upload = multer({ storage: storage });
 
 uploadRouter.post("/file", upload.single("file"), (req, res) => {
     // File has been uploaded and saved in the "uploads" folder
-    const fileUrl = req.file.path;
-    res.status(200).send(`${fileUrl}`);
+    try {
+
+        const fileUrl = req.file.path;
+        res.status(200).send(`${fileUrl}`);
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
 });
 uploadRouter.post("/files", upload.array("files"), (req, res) => {
-    // Files have been uploaded and saved in the "uploads" folder 
-    const fileUrls = req.files.map(file => file.path);
-    res.status(200).send(`Files uploaded successfully. File URLs: ${fileUrls.join(", ")}`);
+    // Files have been uploaded and saved in the "uploads" folder
+    try {
+
+        const fileUrls = req.files.map(file => file.path);
+        res.status(200).send(`Files uploaded successfully. File URLs: ${fileUrls.join(", ")}`);
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
 });
 
 export default uploadRouter;
