@@ -22,10 +22,10 @@ userRouter.post('/login', limiter, async (req, res) => {
         const isValid = await comparePassword(user.Password, req.body.Password);
         if (!isValid) return res.status(401).json({ message: "Invalid password" });
         const token = createJWT(user);
-        res.status(200).json({ token: token, message: "Success", Role: user.Role });
+        res.status(200).json({ message: "Success", data: { token: token, Role: user.Role } });
     } catch (error) {
         console.log(error);
-        res.status(401).json({ token: "", message: "Error occurred" })
+        res.status(400).json({ token: "", message: "Error occurred" })
     }
 });
 
@@ -33,18 +33,18 @@ userRouter.post('/signup', async (req, res) => {
     try {
         const hash = await hashPassword(req.body.Password);
         const user = await User.create({ ...req.body, Password: hash });
-        res.json(user);
+        res.status(200).json({ data: user, message: "User created successfully" });
     } catch (error) {
-        res.json({ message: "Duplicate email" })
+        res.status(400).json({ message: "Duplicate email" })
     }
 });
 
 userRouter.get('/profile', async (req, res) => {
     try {
         const user = await User.findById(req.user._id).lean().exec();
-        res.json(user);
+        res.status(200).json({ data: user, message: "User fetched successfully" });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
@@ -52,9 +52,9 @@ userRouter.put('/profile', async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.user._id, req.body
             , { new: true });
-        res.status(200).json({ message: "User updated successfully" });
+        res.status(200).json({ message: "User updated successfully", data: user });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
@@ -63,7 +63,7 @@ userRouter.delete('/profile', async (req, res) => {
         await User.findByIdAndUpdate(req.user._id, { Active: 0 });
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
