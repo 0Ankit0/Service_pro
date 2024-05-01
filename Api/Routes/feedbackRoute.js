@@ -17,7 +17,7 @@ feedbackRouter.get('/', async (req, res) => {
 feedbackRouter.post('/add', async (req, res) => {
     try {
         const feedback = await Feedback.create({ ...req.body, UserId: req.user.id });
-        res.status(200).json({ message: "Feedback added successfully" });
+        res.status(200).json({ message: "Feedback added successfully", data: feedback });
     } catch (error) {
         res.status(400).json({ message: "Error occurred" })
     }
@@ -35,7 +35,7 @@ feedbackRouter.delete('/delete/:id', async (req, res) => {
 feedbackRouter.put('/update/:id', async (req, res) => {
     try {
         const feedback = await Feedback.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json({ message: "Feedback updated successfully" });
+        res.status(200).json({ message: "Feedback updated successfully", data: feedback });
     } catch (error) {
         res.status(400).json({ message: "Error occurred" })
     }
