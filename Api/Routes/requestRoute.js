@@ -4,34 +4,39 @@ import { Router } from "express";
 const requestRouter = Router();
 
 requestRouter.get('/', async (req, res) => {
-    var requests = await Request.find({}).lean().exec();
-    res.json(requests);
+    try {
+
+        var requests = await Request.find({}).lean().exec();
+        res.status(200).json({ message: "Requests fetched successfully", data: requests });
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
 });
 
 requestRouter.post('/add', async (req, res) => {
     try {
         const request = await Request.create({ ...req.body, UserId: req.user.id });
-        res.json(request);
+        res.status(200).json({ message: "Request added successfully", data: request });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
 requestRouter.put('/update/:id', async (req, res) => {
     try {
         const request = await Request.findByIdAndUpdate(req.params.id, req.body);
-        res.json({ message: "Request updated successfully" });
+        res.status(200).json({ message: "Request updated successfully", data: request });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
 requestRouter.delete('/delete/:id', async (req, res) => {
     try {
         const request = await Request.findByIdAndDelete(req.params.id);
-        res.json({ message: "Request deleted successfully" });
+        res.status(200).json({ message: "Request deleted successfully" });
     } catch (error) {
-        res.json({ message: "Error occurred" })
+        res.status(400).json({ message: "Error occurred" })
     }
 });
 
