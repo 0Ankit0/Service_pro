@@ -30,6 +30,14 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Service'
     }],
+    ServiceAnalytics: {
+        TotalServices: {
+            type: Number, default: 0
+        },
+        CompletedServices: {
+            type: Number, default: 0
+        },
+    }
 }, { timestamps: true }
 )
 export const User = mongoose.model('User', userSchema)
