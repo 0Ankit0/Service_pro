@@ -1,6 +1,7 @@
 import { Service } from "../Modals/services.js";
 import { Router } from "express";
 import { protect } from "../Middleware/auth.js";
+import { enforceRole } from "../Middleware/auth.js";
 
 const serviceRouter = Router();
 
@@ -32,7 +33,7 @@ serviceRouter.put('/update/:id', protect, async (req, res) => {
     }
 });
 
-serviceRouter.delete('/delete/:id', protect, async (req, res) => {
+serviceRouter.delete('/delete/:id', protect, enforceRole('Admin'), async (req, res) => {
     try {
         const service = await Service.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: "Service deleted successfully" });
