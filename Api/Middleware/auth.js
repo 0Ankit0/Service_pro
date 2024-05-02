@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const createJWT = (user) => {
-    const token = jwt.sign({ id: user.id, name: user.Name }, process.env.JWTSecret);
+    const token = jwt.sign({ id: user.id, name: user.Name, Role: user.Role }, process.env.JWTSecret);
     return token;
 }
 export const hashPassword = (password) => {
@@ -33,5 +33,13 @@ export const protect = (req, res, next) => {
         next();
     } catch (e) {
         res.status(401).json({ message: "Invalid token" })
+    }
+}
+function enforceRole(role) {
+    return function (req, res, next) {
+        if (req.user.Role !== role) {
+            return res.status(403).json({ message: "Forbidden: You do not have permission to perform this action" });
+        }
+        next();
     }
 }
