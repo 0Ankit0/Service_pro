@@ -8,4 +8,7 @@ const serviceSchema = new mongoose.Schema({
     Image: { type: String },
 }, { timestamps: true }
 )
+
+serviceSchema.index({ Name: 'text' });
+
 export const Service = mongoose.model('Service', serviceSchema)
