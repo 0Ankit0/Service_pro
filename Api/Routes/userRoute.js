@@ -67,4 +67,13 @@ userRouter.delete('/profile', async (req, res) => {
     }
 });
 
+userRouter.get('/search/:ServiceId', async (req, res) => {
+    try {
+        const users = await User.find({ Services: req.params.ServiceId }).lean().exec();
+        res.status(200).json({ message: "Users fetched successfully", data: users });
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
+});
+
 export default userRouter;
