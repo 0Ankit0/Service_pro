@@ -76,4 +76,12 @@ userRouter.get('/search/:ServiceId', async (req, res) => {
     }
 });
 
+userRouter.get('/search/:userName', async (req, res) => {
+    try {
+        const users = await User.find({ Name: req.params.userName }).lean().exec();
+        res.status(200).json({ message: "Users fetched successfully", data: users });
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" });
+    }
+});
 export default userRouter;

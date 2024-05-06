@@ -40,4 +40,6 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true }
 )
+//to create text index for search using name
+userSchema.index({ Name: 'text' });
 export const User = mongoose.model('User', userSchema)
