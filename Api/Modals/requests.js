@@ -11,6 +11,10 @@ const requestSchema = new mongoose.Schema({
         ref: 'Service',
         required: true
     },
+    ProviderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     Date: { type: String, required: true },
     Time: { type: String, required: true },
     Status: { type: String, required: true },
