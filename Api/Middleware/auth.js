@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import LoginLog from "../Modals/LoginLog";
 
 export const createJWT = (user) => {
     const token = jwt.sign({ id: user.id, name: user.Name, Role: user.Role }, process.env.JWTSecret);
@@ -30,6 +31,14 @@ export const protect = (req, res, next) => {
     try {
         const user = jwt.verify(token, process.env.JWTSecret);
         req.user = user;
+
+        LoginLog.findOne({ userId: user.id, logoutTime: { $ne: null } })
+            .then((loginLog) => {
+                if (loginLog) {
+                    res.status(401).json({ message: "Token Already used" })
+                }
+            });
+
         next();
     } catch (e) {
         res.status(401).json({ message: "Invalid token" })

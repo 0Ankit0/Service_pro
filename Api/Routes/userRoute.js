@@ -2,6 +2,7 @@ import { Router } from "express";
 import { User } from "../Modals/users.js";
 import { createJWT, hashPassword, comparePassword } from "../Middleware/auth.js";
 import rateLimit from "express-rate-limit";
+import { LoginLog } from "../Modals/LoginLog.js";
 
 const userRouter = Router();
 
@@ -22,6 +23,9 @@ userRouter.post('/login', limiter, async (req, res) => {
         const isValid = await comparePassword(user.Password, req.body.Password);
         if (!isValid) return res.status(401).json({ message: "Invalid password" });
         const token = createJWT(user);
+
+        await LoginLog.create({ userId: user._id, loginTime: new Date(), ipAddress: req.ip, Machine: req.headers['user-agent'] });
+
         res.status(200).json({ message: "Success", data: { token: token, Role: user.Role } });
     } catch (error) {
         console.log(error);
