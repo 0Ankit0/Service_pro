@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import LoginLog from "../Modals/LoginLog";
+import { LoginLog } from "../Modals/LoginLog.js";
 
 export const createJWT = (user) => {
     const token = jwt.sign({ id: user.id, name: user.Name, Role: user.Role }, process.env.JWTSecret);

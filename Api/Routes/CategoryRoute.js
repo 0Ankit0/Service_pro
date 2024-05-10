@@ -6,7 +6,7 @@ const CategoryRouter = Router();
 
 CategoryRouter.get("/", async (req, res) => {
     try {
-        const categories = await Category.find().lean().exec();
+        const categories = await Category.find().populate('Services').lean().exec();
         return res.status(200).json({ message: "Categories fetched successfully", data: categories });
     } catch (error) {
         return res.status(400).json({ error: error.message });
