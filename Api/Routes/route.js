@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import CategoryRouter from "./CategoryRoute.js";
 // import { setupChangeStream } from '../Middleware/ChangeStream.js';
 import messageRouter from "./messageRoute.js";
+import feedbackRouter from "./feedbackRoute.js";
 
 var app = express();
 app.use(Cors());
@@ -30,5 +31,6 @@ app.use('/upload', protect, uploadRouter);
 app.use('/mail', protect, mailRouter);
 app.use('/message', protect, messageRouter);
 app.use('/category', CategoryRouter);
+app.use('/feedback', protect, feedbackRouter);
 app.use('/service', serviceRouter);
 export default app;

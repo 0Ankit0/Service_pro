@@ -12,7 +12,7 @@ const feedbackSchema = new mongoose.Schema({
         required: true
     },
     Rating: { type: Number, required: true },
-    Comment: { type: String, required: true },
+    Comment: { type: String },
 }, { timestamps: true }
 )
 export const Feedback = mongoose.model('Feedback', feedbackSchema)
