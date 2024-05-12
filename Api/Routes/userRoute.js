@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { User } from "../Modals/users.js";
-import { createJWT, hashPassword, comparePassword } from "../Middleware/auth.js";
+import { createJWT, hashPassword, comparePassword, protect } from "../Middleware/auth.js";
 import rateLimit from "express-rate-limit";
 import { LoginLog } from "../Modals/LoginLog.js";
+
 
 const userRouter = Router();
 
@@ -29,7 +30,7 @@ userRouter.post('/login', limiter, async (req, res) => {
         res.status(200).json({ message: "Success", data: { token: token, Role: user.Role } });
     } catch (error) {
         console.log(error);
-        res.status(400).json({ token: "", message: "Error occurred" })
+        res.status(400).json({ token: "", message: error.message })
     }
 });
 
@@ -39,26 +40,26 @@ userRouter.post('/signup', async (req, res) => {
         const user = await User.create({ ...req.body, Password: hash });
         res.status(200).json({ data: user, message: "User created successfully" });
     } catch (error) {
-        res.status(400).json({ message: "Duplicate email" })
+        res.status(400).json({ message: error.message })
     }
 });
 
-userRouter.get('/profile', async (req, res) => {
+userRouter.get('/profile', protect, async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).lean().exec();
+        const user = await User.findById(req.user.id).lean().exec();
         res.status(200).json({ data: user, message: "User fetched successfully" });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" })
+        res.status(400).json({ message: error.message })
     }
 });
 
-userRouter.put('/profile', async (req, res) => {
+userRouter.put('/profile', protect, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.user._id, req.body
+        const user = await User.findByIdAndUpdate(req.user.id, req.body
             , { new: true });
         res.status(200).json({ message: "User updated successfully", data: user });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" })
+        res.status(400).json({ message: error.message })
     }
 });
 
@@ -67,25 +68,18 @@ userRouter.delete('/profile', async (req, res) => {
         await User.findByIdAndUpdate(req.user._id, { Active: 0 });
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" })
+        res.status(400).json({ message: error.message })
     }
 });
 
-userRouter.get('/search/:ServiceId', async (req, res) => {
-    try {
-        const users = await User.find({ Services: req.params.ServiceId }).lean().exec();
-        res.status(200).json({ message: "Users fetched successfully", data: users });
-    } catch (error) {
-        res.status(400).json({ message: "Error occurred" });
-    }
-});
+
 
 userRouter.get('/search/:userName', async (req, res) => {
     try {
-        const users = await User.find({ Name: req.params.userName }).lean().exec();
+        const users = await User.find({ $text: { $search: req.params.userName } }).lean().exec();
         res.status(200).json({ message: "Users fetched successfully", data: users });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" });
+        res.status(400).json({ message: error.message });
     }
 });
 export default userRouter;
