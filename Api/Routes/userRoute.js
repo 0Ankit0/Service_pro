@@ -3,7 +3,7 @@ import { User } from "../Modals/users.js";
 import { createJWT, hashPassword, comparePassword, protect } from "../Middleware/auth.js";
 import rateLimit from "express-rate-limit";
 import { LoginLog } from "../Modals/LoginLog.js";
-
+import mongoose from "mongoose";
 
 const userRouter = Router();
 
@@ -63,6 +63,7 @@ userRouter.put('/profile', protect, async (req, res) => {
     }
 });
 
+
 userRouter.delete('/profile', async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.user._id, { Active: 0 });
@@ -72,7 +73,15 @@ userRouter.delete('/profile', async (req, res) => {
     }
 });
 
+userRouter.get('/service/:serviceId', async (req, res) => {
+    try {
 
+        const users = await User.find({ Services: { $in: (req.params.serviceId) } }).populate('Services').lean().exec();
+        res.status(200).json({ message: "User fetched successfully", data: users });
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
 
 userRouter.get('/search/:userName', async (req, res) => {
     try {
