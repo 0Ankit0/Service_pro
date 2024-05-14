@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { User } from "../Modals/users.js";
-import { createJWT, hashPassword, comparePassword, protect } from "../Middleware/auth.js";
+import { createJWT, hashPassword, comparePassword, protect, enforceRole } from "../Middleware/auth.js";
 import rateLimit from "express-rate-limit";
 import { LoginLog } from "../Modals/LoginLog.js";
 import mongoose from "mongoose";
@@ -91,4 +91,14 @@ userRouter.get('/search/:userName', async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+userRouter.get('/activate/:userId', enforceRole('admin'), async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.params.userId, { Active: 1 });
+        res.status(200).json({ message: "User activated successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 export default userRouter;
