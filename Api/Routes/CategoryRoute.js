@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Category } from "../Modals/Category.js";
-import { protect } from "../Middleware/auth.js";
+import { enforceRole, protect } from "../Middleware/auth.js";
 
 const CategoryRouter = Router();
 
@@ -33,7 +33,7 @@ CategoryRouter.put("/update/:id", protect, async (req, res) => {
         return res.status(400).json({ error: error.message });
     }
 });
-CategoryRouter.delete("/delete/:id", protect, async (req, res) => {
+CategoryRouter.delete("/delete/:id", protect, enforceRole('admin'), async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         return res.status(200).json({ message: "Category Deleted Successfully" });
