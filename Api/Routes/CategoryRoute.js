@@ -25,7 +25,7 @@ CategoryRouter.put("/update/:id", protect, async (req, res) => {
     try {
         const category = await Category.findByIdAndUpdate(
             req.params.id,
-            { Services: req.body.Services },
+            req.body,
             { new: true } // to return updated document
         );
         return res.status(200).json({ message: "Category Updated Successfully", data: category });
