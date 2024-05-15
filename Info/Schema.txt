@@ -1,0 +1,88 @@
+Table users {
+  _id integer [primary key]
+  Name varchar
+  Email varchar [unique]
+  Password varchar
+  PhoneNo integer
+  Address varchar
+  Role Role 
+  Image varchar
+  Active integer [default: 1]
+  created_at timestamp
+}
+
+Enum Role {
+  user
+  provider
+  admin
+}
+
+Table services {
+  _id integer [primary key]
+  Name varchar [not null]
+  Description varchar
+  Price float
+  Duration varchar
+  Image varchar
+  created_at timestamp
+}
+
+Table requests {
+  _id integer [primary key]
+  UserId integer [ref: > users._id, not null]
+  ServiceId integer [ref: > services._id, not null]
+  Date varchar [not null]
+  Time varchar [not null]
+  Status varchar [not null]
+  created_at timestamp
+}
+
+Table messages {
+  _id integer [primary key]
+  message varchar [not null]
+  sender_id integer [ref: > users._id, not null]
+  receiver_id integer [ref: > users._id, not null]
+  created_at timestamp
+}
+
+Table mails {
+  _id integer [primary key]
+  Email varchar [not null]
+  Body varchar [not null]
+  created_at timestamp
+}
+
+Table feedbacks {
+  _id integer [primary key]
+  UserId integer [ref: > users._id, not null]
+  ServiceId integer [ref: > services._id, not null]
+  Rating float [not null]
+  Comment varchar [not null]
+  created_at timestamp
+}
+
+Table chat_groups {
+  _id integer [primary key]
+  Name varchar [not null]
+  created_at timestamp
+}
+
+Table chat_group_members {
+  id integer [primary key]
+  chat_group_id integer [ref: > chat_groups._id, not null]
+  user_id integer [ref: > users._id, not null]
+}
+
+Table categories {
+  _id integer [primary key]
+  Name varchar [not null, unique]
+  Description varchar
+  Image varchar
+  created_at timestamp
+}
+
+Table category_services {
+  id integer [primary key]
+  category_id integer [ref: > categories._id, not null]
+  service_id integer [ref: > services._id, not null]
+}
