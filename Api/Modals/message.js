@@ -14,7 +14,8 @@ const messageSchema = new mongoose.Schema({
         required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    Active: { type: Boolean, default: true }
 }, {
     timestamps: true
 });

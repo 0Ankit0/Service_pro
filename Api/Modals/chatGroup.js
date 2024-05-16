@@ -8,7 +8,8 @@ const chatGroupSchema = new mongoose.Schema({
     Members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }]
+    }],
+    Active: { type: Boolean, default: true }
 }, { timestamps: true });
 
 export const ChatGroup = mongoose.model("ChatGroup", chatGroupSchema);

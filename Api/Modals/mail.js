@@ -9,6 +9,7 @@ const mailSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    Active: { type: Boolean, default: true }
 }, { timestamps: true });
 
 export const Mail = mongoose.model('Mail', mailSchema);

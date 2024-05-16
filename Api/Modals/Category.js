@@ -15,7 +15,8 @@ const CategorySchema = new mongoose.Schema({
     }],
     Image: {
         type: String
-    }
+    },
+    Active: { type: Boolean, default: true }
 }, { timestamps: true });
 
 export const Category = mongoose.model('Category', CategorySchema);

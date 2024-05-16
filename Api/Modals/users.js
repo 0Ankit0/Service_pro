@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: String
     }],
     Active: {
-        type: Number, default: 1
+        type: Boolean, default: true
     },
     Services: [{
         type: mongoose.Schema.Types.ObjectId,

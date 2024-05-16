@@ -23,6 +23,7 @@ const requestSchema = new mongoose.Schema({
         enum: ['pending', 'accepted', 'completed', 'cancelled'],
         default: 'pending'
     },
+    Active: { type: Boolean, default: true }
 }, { timestamps: true }
 )
 export const Request = mongoose.model('Request', requestSchema)
