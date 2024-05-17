@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "pm2 start index.js --name service-api"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "mongoose": "^8.2.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.12",
+    "pm2": "^5.3.1",
     "socket.io": "^4.7.5"
   }
 }
