@@ -101,4 +101,13 @@ userRouter.get('/activate/:userId', enforceRole('admin'), async (req, res) => {
     }
 });
 
+userRouter.post('/logout', protect, async (req, res) => {
+    try {
+        await LoginLog.updateOne({ userId: req.user.id, logoutTime: null }, { logoutTime: new Date() });
+        res.status(200).json({ message: "User logged out successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 export default userRouter;
