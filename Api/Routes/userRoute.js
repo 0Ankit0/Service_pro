@@ -25,7 +25,7 @@ userRouter.post('/login', limiter, async (req, res) => {
         if (!isValid) return res.status(401).json({ message: "Invalid password" });
         const token = createJWT(user);
 
-        await LoginLog.create({ userId: user._id, loginTime: new Date(), ipAddress: req.ip, Machine: req.headers['user-agent'] });
+        await LoginLog.create({ Token: token, loginTime: new Date(), ipAddress: req.ip, Machine: req.headers['user-agent'] });
 
         res.status(200).json({ message: "Success", data: { token: token, Role: user.Role } });
     } catch (error) {

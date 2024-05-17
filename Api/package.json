@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "pm2 start index.js --name service-api"
+    "start": "pm2 start index.js --name service-api",
+    "stop": "pm2 stop service-api",
+    "restart": "pm2 restart service-api"
   },
   "keywords": [],
   "author": "",
