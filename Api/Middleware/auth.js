@@ -32,7 +32,7 @@ export const protect = (req, res, next) => {
         const user = jwt.verify(token, process.env.JWTSecret);
         req.user = user;
 
-        LoginLog.findOne({ userId: user.id, logoutTime: { $ne: null } })
+        LoginLog.findOne({ Token: token, logoutTime: { $ne: null } })
             .then((loginLog) => {
                 if (loginLog) {
                     res.status(401).json({ message: "Token Already used" })
