@@ -6,6 +6,15 @@ const loginLogSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    UserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    Name: {
+        type: String,
+        required: true,
+    },
     loginTime: {
         type: Date,
         required: true,
