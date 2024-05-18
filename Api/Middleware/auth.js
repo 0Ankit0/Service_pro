@@ -35,7 +35,7 @@ export const protect = (req, res, next) => {
         LoginLog.findOne({ Token: token, logoutTime: { $ne: null } })
             .then((loginLog) => {
                 if (loginLog) {
-                    res.status(401).json({ message: "Token Already used" })
+                    return res.status(401).json({ message: "Token Already used" })
                 }
             });
 

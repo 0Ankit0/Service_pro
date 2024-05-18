@@ -25,7 +25,15 @@ router.get('/', async (req, res) => { //this is /upload/index page
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/");
+        const userId = req.user.id;
+        const userDir = path.join(__dirname, "uploads", userId);
+
+        // If the directory does not exist, create it
+        if (!fs.existsSync(userDir)) {
+            fs.mkdirSync(userDir, { recursive: true });
+        }
+
+        cb(null, userDir);
     },
     filename: function (req, file, cb) {
         const now = Date.now();
@@ -39,21 +47,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-export const userFiles = new Map(); // This map will store the token and the corresponding files
 
 uploadRouter.post("/file", upload.single("file"), (req, res) => {
     try {
         const fileUrl = req.file.path;
-        const token = req.headers.authorization;
-
-        // If the token is not in the map, add it with an empty array
-        if (!userFiles.has(token)) {
-            userFiles.set(token, []);
-        }
-
-        // Add the file to the array of files for this token
-        userFiles.get(token).push(fileUrl);
-
         res.status(200).send(`${fileUrl}`);
     } catch (error) {
         res.status(400).json({ message: "Error occurred" });

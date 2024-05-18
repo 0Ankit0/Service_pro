@@ -1,33 +1,35 @@
-import express from "express";
-import multer from "multer";
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { userFiles } from '../Routes/uploadRoute.js';
 
-
-var router = express();
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const uploadsDir = path.join(__dirname, 'uploads');
-
-
-export const removeTempFiles = (req, res, next) => {
-    const token = req.headers.authorization;
+export const removeTempFiles = async (req, res, next) => {
     const fileName = req.body.fileName;
+    const userId = req.user.id;
+    const userDir = path.resolve(__dirname, "uploads", userId);
+    const uploadsDir = path.resolve(__dirname, "uploads");
 
-    if (userFiles.has(token)) {
-        let files = userFiles.get(token);
-        files = files.filter(file => path.basename(file) === fileName);
+    try {
+        // Check if the directory exists
+        await fs.access(userDir);
 
-        // Delete the files not matching the provided file name
-        userFiles.get(token).forEach(file => {
-            if (path.basename(file) !== fileName) {
-                fs.unlinkSync(file);
+        const files = await fs.readdir(userDir);
+
+        // Handle all file deletions concurrently
+        await Promise.all(files.map(async (file) => {
+            const filePath = path.resolve(userDir, file);
+
+            if (file !== fileName) {
+                // Delete the file
+                await fs.unlink(filePath);
+            } else {
+                // Move the file to the uploads directory
+                const newFilePath = path.resolve(uploadsDir, file);
+                await fs.rename(filePath, newFilePath);
             }
-        });
-        // Empty the set for this token
-        userFiles.set(token, []);
+        }));
+
+        next();
+    } catch (error) {
+        console.error(`Error occurred: ${error}`);
+        res.status(400).json({ message: "Error occurred" });
     }
-    next();
-}
+};
