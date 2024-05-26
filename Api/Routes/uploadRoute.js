@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { protect } from "../Middleware/auth";
 
 
 const uploadRouter = Router();
@@ -48,7 +49,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-uploadRouter.post("/file", upload.single("file"), (req, res) => {
+uploadRouter.post("/file", protect, upload.single("file"), (req, res) => {
     try {
         const fileUrl = req.file.path;
         res.status(200).send(`${fileUrl}`);
@@ -57,7 +58,7 @@ uploadRouter.post("/file", upload.single("file"), (req, res) => {
     }
 });
 
-uploadRouter.post("/files", upload.array("files"), (req, res) => {
+uploadRouter.post("/files", protect, upload.array("files"), (req, res) => {
     try {
         const fileUrls = req.files.map(file => file.path);
         const token = req.headers.authorization;

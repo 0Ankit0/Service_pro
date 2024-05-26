@@ -26,7 +26,7 @@ const uploadsDir = path.join(__dirname, '..', 'uploads');
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(uploadsDir));
-app.use('/upload', protect, uploadRouter);
+app.use('/upload', uploadRouter);
 
 app.use('/mail', protect, mailRouter);
 app.use('/message', protect, messageRouter);
