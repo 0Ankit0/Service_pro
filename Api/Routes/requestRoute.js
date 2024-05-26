@@ -39,5 +39,13 @@ requestRouter.delete('/delete/:id', async (req, res) => {
         res.status(400).json({ message: "Error occurred" })
     }
 });
+requestRouter.post('/cancel/:id', async (req, res) => {
+    try {
+        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "cancelled" });
+        res.status(200).json({ message: "Request cancelled successfully", data: request });
+    } catch (error) {
+        res.status(400).json({ message: "Error occurred" })
+    }
+});
 
 export default requestRouter;

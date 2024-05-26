@@ -33,13 +33,6 @@ CategoryRouter.put("/update/:id", protect, async (req, res) => {
         return res.status(400).json({ error: error.message });
     }
 });
-CategoryRouter.delete("/delete/:id", protect, enforceRole('admin'), async (req, res) => {
-    try {
-        const category = await Category.findByIdAndDelete(req.params.id);
-        return res.status(200).json({ message: "Category Deleted Successfully" });
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-});
+
 
 export default CategoryRouter;

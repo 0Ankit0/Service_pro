@@ -35,7 +35,7 @@ serviceRouter.put('/update/:id', protect, async (req, res) => {
 
 serviceRouter.delete('/delete/:id', protect, enforceRole('admin'), async (req, res) => {
     try {
-        const service = await Service.findByIdAndDelete(req.params.id);
+        const service = await Service.findByIdAndUpdate(req.params.id, { Active: 0 });
         res.status(200).json({ message: "Service deleted successfully" });
     } catch (error) {
         res.status(400).json({ message: "Error occurred" })

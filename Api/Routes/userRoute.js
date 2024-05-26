@@ -9,7 +9,7 @@ const userRouter = Router();
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 5, // limit each IP to 5 requests per windowMs
+    max: 3, // limit each IP to 5 requests per windowMs
     handler: function (req, res, /*next*/) {
         const retryAfter = Math.ceil(res.getHeaders()['retry-after'] / 60); // Get the Retry-After header and convert it to minutes
         res.status(429).json({
