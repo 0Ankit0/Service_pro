@@ -9,8 +9,27 @@ const mailSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    Name: { type: string },
-    Active: { type: Boolean, default: true }
+    Code: {
+        type: String,
+    },
+    Name: { type: string }
 }, { timestamps: true });
+mailSchema.methods.isExpired = function () {
+    const now = new Date();
+    const fiveMinutesLater = new Date(this.date.getTime() + 5 * 60 * 1000);
+    return now > fiveMinutesLater;
+};
 
-export const Mail = mongoose.model('Mail', mailSchema);
+const generateUniqueCode = async () => {
+    let code;
+    let codeExists = true;
+
+    while (codeExists) {
+        code = Math.floor(100000 + Math.random() * 900000).toString();
+        codeExists = await Code.findOne({ code });
+    }
+
+    return code;
+};
+const Mail = mongoose.model('Mail', mailSchema);
+export { Mail, generateUniqueCode };

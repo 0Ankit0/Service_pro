@@ -1,6 +1,7 @@
 import { Router } from "express";
 import nodemailer from "nodemailer";
 import { Mail } from "../Modals/mail.js";
+import { generateUniqueCode } from "../Modals/mail.js";
 import * as dotenv from 'dotenv';
 import mg from 'nodemailer-mailgun-transport';
 dotenv.config();
@@ -56,24 +57,28 @@ mailRouter.post('/send/welcome', async (req, res) => {
                 console.log(error);
                 res.status(500).send(error);
             } else {
-                res.status(200).send({ message: 'Email sent successfully ' });
+                Mail.create({ Email, Body: 'Welcome', Name }).then(() => {
+                    res.status(200).send({ message: 'Email sent successfully ' });
+                }).catch((error) => {
+                    res.status(500).send({ message: error });
+                });
             }
         });
     } catch (error) {
         req.status(500).send({ message: error });
     }
-
 });
+
 mailRouter.post('/send/resetPassword', async (req, res) => {
     try {
         const { Name, Email } = req.body;
-
+        const Code = await generateUniqueCode();
         const mailOptions = {
             from: 'serviceapp@ankitpdl.me', // replace with your email
             to: Email, // recipient's email
             subject: 'Password Reset', // replace with your subject
-            template: "welcome",
-            'h:X-Mailgun-Variables': { username: Name }
+            template: "resetpassword",
+            'h:X-Mailgun-Variables': { code: Code }
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -81,7 +86,11 @@ mailRouter.post('/send/resetPassword', async (req, res) => {
                 console.log(error);
                 res.status(500).send(error);
             } else {
-                res.status(200).send({ message: 'Email sent successfully ' });
+                Mail.create({ Email, Body: 'password reset', Code, Name }).then(() => {
+                    res.status(200).send({ message: 'Email sent successfully ' });
+                }).catch((error) => {
+                    res.status(500).send({ message: error });
+                });
             }
         });
     } catch (error) {
