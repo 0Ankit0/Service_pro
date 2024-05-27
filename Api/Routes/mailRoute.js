@@ -48,7 +48,32 @@ mailRouter.post('/send/welcome', async (req, res) => {
             to: Email, // recipient's email
             subject: 'Welcome To Service App', // replace with your subject
             template: "welcome",
-            'h:X-Mailgun-Variables': { test: Name }
+            'h:X-Mailgun-Variables': { username: Name }
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                res.status(500).send(error);
+            } else {
+                res.status(200).send({ message: 'Email sent successfully ' });
+            }
+        });
+    } catch (error) {
+        req.status(500).send({ message: error });
+    }
+
+});
+mailRouter.post('/send/resetPassword', async (req, res) => {
+    try {
+        const { Name, Email } = req.body;
+
+        const mailOptions = {
+            from: 'serviceapp@ankitpdl.me', // replace with your email
+            to: Email, // recipient's email
+            subject: 'Password Reset', // replace with your subject
+            template: "welcome",
+            'h:X-Mailgun-Variables': { username: Name }
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
