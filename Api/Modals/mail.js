@@ -9,6 +9,7 @@ const mailSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    Name: { type: string },
     Active: { type: Boolean, default: true }
 }, { timestamps: true });
 
