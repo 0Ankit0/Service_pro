@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema({
     Image: [{
         type: String
     }],
+    Verified: {
+        type: Boolean, default: false
+    },
     Active: {
         type: Boolean, default: true
     },

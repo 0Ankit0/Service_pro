@@ -42,14 +42,15 @@ mailRouter.post('/send', async (req, res) => {
 });
 mailRouter.post('/send/welcome', async (req, res) => {
     try {
-        const { Name, Email } = req.body;
+        const link = `http://20.52.185.247:8000/user/verifyAccount?id=${req.body.id}`;
+        const { Email } = req.body;
 
         const mailOptions = {
             from: 'serviceapp@ankitpdl.me', // replace with your email
             to: Email, // recipient's email
             subject: 'Welcome To Service App', // replace with your subject
             template: "welcome",
-            'h:X-Mailgun-Variables': { username: Name }
+            'h:X-Mailgun-Variables': { link: link }
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

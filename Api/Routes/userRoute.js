@@ -27,7 +27,7 @@ userRouter.post('/login', limiter, async (req, res) => {
 
         await LoginLog.create({ Token: token, loginTime: new Date(), ipAddress: req.ip, Machine: req.headers['user-agent'], UserId: user._id, Name: user.Name });
 
-        res.status(200).json({ message: "Success", data: { token: token, Role: user.Role } });
+        res.status(200).json({ message: "Success", data: { token: token, Role: user.Role, Verified: user.Verified } });
     } catch (error) {
         console.log(error);
         res.status(400).json({ token: "", message: error.message })
@@ -63,6 +63,42 @@ userRouter.put('/profile', protect, async (req, res) => {
     }
 });
 
+userRouter.get('/verifyAccount', async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.query.id, { Verified: true });
+        res.status(200).send(
+            `<!DOCTYPE html>
+            <html>
+              <head>
+                <title>Account Verified</title>
+                <style>
+                  body{
+              padding: 25px;
+            }
+            .title {
+                color: #5C6AC4;
+            }
+                </style>
+              </head>
+              <body>
+                  <h1 class="title">Your Account Has been Verified Successfully</h1>
+                  <p id="currentTime"></p>
+                  <script type="text/javascript">
+                    function showTime() {
+                document.getElementById('currentTime').innerHTML = new Date().toUTCString();
+            }
+            showTime();
+            setInterval(function () {
+                showTime();
+            }, 1000);
+                  </script>
+              </body>
+            </html>`
+        );
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
 
 userRouter.delete('/profile', async (req, res) => {
     try {
