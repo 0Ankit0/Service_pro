@@ -12,7 +12,7 @@ const mailSchema = new mongoose.Schema({
     Code: {
         type: String,
     },
-    Name: { type: string }
+    Name: { type: String }
 }, { timestamps: true });
 mailSchema.methods.isExpired = function () {
     const now = new Date();
