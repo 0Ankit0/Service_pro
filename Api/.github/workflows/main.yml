@@ -1,0 +1,13 @@
+on: [push]
+jobs:
+  build-and-run:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and run Docker
+        run: |
+          docker build -t myapp .
+          docker run myapp
