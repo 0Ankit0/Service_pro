@@ -36,7 +36,7 @@ mailRouter.post('/send', async (req, res) => {
             }
         });
     } catch (error) {
-        req.status(500).send({ message: error });
+        req.status(500).send({ message: error.message });
     }
 
 });
@@ -61,12 +61,12 @@ mailRouter.post('/send/welcome', async (req, res) => {
                 Mail.create({ Email, Body: 'Welcome', Name }).then(() => {
                     res.status(200).send({ message: 'Email sent successfully ' });
                 }).catch((error) => {
-                    res.status(500).send({ message: error });
+                    res.status(500).send({ message: error.message });
                 });
             }
         });
     } catch (error) {
-        req.status(500).send({ message: error });
+        req.status(500).send({ message: error.message });
     }
 });
 
@@ -90,7 +90,7 @@ mailRouter.post('/send/resetPassword', async (req, res) => {
                 Mail.create({ Email, Body: 'password reset', Code, Name }).then(() => {
                     res.status(200).send({ message: 'Email sent successfully ' });
                 }).catch((error) => {
-                    res.status(500).send({ message: error });
+                    res.status(500).send({ message: error.message });
                 });
             }
         });

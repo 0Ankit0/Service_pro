@@ -15,7 +15,7 @@ messageRouter.get('/userList', async (req, res) => {
         });
         res.status(200).json({ message: "User List", users });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" });
+        res.status(400).json({ message: error.message });
 
     }
 });

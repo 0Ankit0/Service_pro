@@ -18,7 +18,7 @@ uploadRouter.get("/", async (req, res) => {
       .map((file) => `http://20.52.185.247:8000/uploads/${file}`);
     res.status(200).send({ files: fileUrls.join(", ") });
   } catch (error) {
-    res.status(400).json({ message: error });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -42,9 +42,9 @@ uploadRouter.post("/file", upload.single("file"), (req, res) => {
   try {
     const fileUrl = req.file.path;
 
-    res.status(200).send(`${fileUrl}`);
+    res.status(200).send(`http://20.52.185.247:8000/${fileUrl}`);
   } catch (error) {
-    res.status(400).json({ message: "Error occurred" });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -56,7 +56,7 @@ uploadRouter.post("/files", upload.array("files"), (req, res) => {
       .status(200)
       .send(`Files uploaded successfully. File URLs: ${fileUrls.join(", ")}`);
   } catch (error) {
-    res.status(400).json({ message: "Error occurred" });
+    res.status(400).json({ message: error.message });
   }
 });
 export default uploadRouter;
