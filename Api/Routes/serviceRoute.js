@@ -55,7 +55,6 @@ serviceRouter.get('/search/:name', async (req, res) => {
         }]);
 
         // const services = await Service.find({ $text: { $search: req.params.name } }); //will search for the name in the text index
->>>>>>> 017d8240e61c2e97c58c87404ca4786881ba85b2
         res.status(200).json({ message: "Services fetched successfully", data: services });
     } catch (error) {
         res.status(400).json({ message: error.message });
