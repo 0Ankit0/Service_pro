@@ -11,6 +11,7 @@ import CategoryRouter from "./CategoryRoute.js";
 // import { setupChangeStream } from '../Middleware/ChangeStream.js';
 import messageRouter from "./messageRoute.js";
 import feedbackRouter from "./feedbackRoute.js";
+import requestRouter from "./requestRoute.js";
 
 var app = express();
 app.use(Cors());
@@ -32,5 +33,6 @@ app.use('/mail', protect, mailRouter);
 app.use('/message', protect, messageRouter);
 app.use('/category', CategoryRouter);
 app.use('/feedback', protect, feedbackRouter);
+app.use('/request', protect, requestRouter);
 app.use('/service', serviceRouter);
 export default app;

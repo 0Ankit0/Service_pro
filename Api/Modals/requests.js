@@ -16,8 +16,7 @@ const requestSchema = new mongoose.Schema({
         ref: 'User'
     },
     Image: { type: String },
-    Date: { type: String, required: true },
-    Time: { type: String, required: true },
+    DateTime: { type: DateTime, default: Date.now },
     Status: {
         type: String,
         enum: ['pending', 'accepted', 'completed', 'cancelled'],
