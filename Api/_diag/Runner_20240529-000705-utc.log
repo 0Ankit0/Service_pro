@@ -1,0 +1,82 @@
+[2024-05-29 00:07:05Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO HostContext] Well known config file 'Credentials': '/home/ankit/Service_pro/Api/.credentials'
+[2024-05-29 00:07:05Z INFO Listener] Runner is built for Linux (X64) - linux-x64.
+[2024-05-29 00:07:05Z INFO Listener] RuntimeInformation: Linux 5.15.0-1064-azure #73~20.04.1-Ubuntu SMP Mon May 6 09:43:44 UTC 2024.
+[2024-05-29 00:07:05Z INFO Listener] Version: 2.278.0
+[2024-05-29 00:07:05Z INFO Listener] Commit: 62d926efce35d3ea16d7624a25aaa5b300737def
+[2024-05-29 00:07:05Z INFO Listener] Culture: 
+[2024-05-29 00:07:05Z INFO Listener] UI Culture: 
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO Listener] Validating directory permissions for: '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO CommandLineParser] Parse
+[2024-05-29 00:07:05Z INFO CommandLineParser] Parsing 5 args
+[2024-05-29 00:07:05Z INFO CommandLineParser] parsing argument
+[2024-05-29 00:07:05Z INFO CommandLineParser] HasArgs: False
+[2024-05-29 00:07:05Z INFO CommandLineParser] Adding Command: configure
+[2024-05-29 00:07:05Z INFO CommandLineParser] parsing argument
+[2024-05-29 00:07:05Z INFO CommandLineParser] HasArgs: True
+[2024-05-29 00:07:05Z INFO CommandLineParser] arg: -url
+[2024-05-29 00:07:05Z INFO CommandLineParser] parsing argument
+[2024-05-29 00:07:05Z INFO CommandLineParser] HasArgs: True
+[2024-05-29 00:07:05Z INFO CommandLineParser] Adding option '-url': 'https://github.com/lgic-project/Service_pro'
+[2024-05-29 00:07:05Z INFO CommandLineParser] parsing argument
+[2024-05-29 00:07:05Z INFO CommandLineParser] HasArgs: True
+[2024-05-29 00:07:05Z INFO CommandLineParser] arg: token
+[2024-05-29 00:07:05Z INFO CommandLineParser] parsing argument
+[2024-05-29 00:07:05Z INFO CommandLineParser] HasArgs: True
+[2024-05-29 00:07:05Z INFO CommandLineParser] Adding option 'token': '***'
+[2024-05-29 00:07:05Z INFO Listener] Arguments parsed
+[2024-05-29 00:07:05Z ERR  Terminal] WRITE ERROR: Unrecognized command-line input arguments: '-url'. For usage refer to: .\config.cmd --help or ./config.sh --help
+[2024-05-29 00:07:05Z INFO Runner] ExecuteCommand
+[2024-05-29 00:07:05Z INFO ConfigurationStore] currentAssemblyLocation: /home/ankit/Service_pro/Api/bin/Runner.Listener.dll
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] binPath: /home/ankit/Service_pro/Api/bin
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] RootFolder: /home/ankit/Service_pro/Api
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO HostContext] Well known config file 'Runner': '/home/ankit/Service_pro/Api/.runner'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] ConfigFilePath: /home/ankit/Service_pro/Api/.runner
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO HostContext] Well known config file 'Credentials': '/home/ankit/Service_pro/Api/.credentials'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] CredFilePath: /home/ankit/Service_pro/Api/.credentials
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO HostContext] Well known config file 'MigratedCredentials': '/home/ankit/Service_pro/Api/.credentials_migrated'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] MigratedCredFilePath: /home/ankit/Service_pro/Api/.credentials_migrated
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Bin': '/home/ankit/Service_pro/Api/bin'
+[2024-05-29 00:07:05Z INFO HostContext] Well known directory 'Root': '/home/ankit/Service_pro/Api'
+[2024-05-29 00:07:05Z INFO HostContext] Well known config file 'Service': '/home/ankit/Service_pro/Api/.service'
+[2024-05-29 00:07:05Z INFO ConfigurationStore] ServiceConfigFilePath: /home/ankit/Service_pro/Api/.service
+[2024-05-29 00:07:05Z INFO CommandSettings] Flag 'help': 'False'
+[2024-05-29 00:07:05Z INFO CommandSettings] Flag 'version': 'False'
+[2024-05-29 00:07:05Z INFO CommandSettings] Flag 'commit': 'False'
+[2024-05-29 00:07:05Z INFO CommandSettings] Flag 'check': 'False'
+[2024-05-29 00:07:05Z INFO CommandSettings] Command 'configure': 'True'
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: 
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: --------------------------------------------------------------------------------
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |        ____ _ _   _   _       _          _        _   _                      |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |       / ___(_) |_| | | |_   _| |__      / \   ___| |_(_) ___  _ __  ___      |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |      | |  _| | __| |_| | | | | '_ \    / _ \ / __| __| |/ _ \| '_ \/ __|     |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |      | |_| | | |_|  _  | |_| | |_) |  / ___ \ (__| |_| | (_) | | | \__ \     |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |       \____|_|\__|_| |_|\__,_|_.__/  /_/   \_\___|\__|_|\___/|_| |_|___/     |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |                                                                              |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE: |                       
+[2024-05-29 00:07:05Z INFO Terminal] WRITE: Self-hosted runner registration
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE:                         |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: |                                                                              |
+[2024-05-29 00:07:05Z INFO Terminal] WRITE LINE: --------------------------------------------------------------------------------
+[2024-05-29 00:07:05Z INFO ConfigurationManager] ConfigureAsync
+[2024-05-29 00:07:05Z INFO ConfigurationStore] IsConfigured()
+[2024-05-29 00:07:05Z INFO ConfigurationStore] IsConfigured: False
+[2024-05-29 00:07:05Z INFO ConfigurationManager] Is configured: False
+[2024-05-29 00:07:05Z INFO CommandSettings] Arg 'url': ''
+[2024-05-29 00:07:05Z INFO CommandSettings] Flag 'unattended': 'False'
+[2024-05-29 00:07:05Z INFO PromptManager] ReadValue
+[2024-05-29 00:07:05Z INFO Terminal] WRITE: What is the URL of your repository? 
+[2024-05-29 00:07:05Z INFO Terminal] READ LINE

@@ -7,11 +7,10 @@ const serviceRouter = Router();
 
 serviceRouter.get('/', async (req, res) => {
     try {
-
         var services = await Service.find({}).lean().exec();
         res.status(200).json({ message: "Services fetched successfully", data: services });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" });
+        res.status(400).json({ message: error.message });
     }
 });
 
@@ -20,7 +19,7 @@ serviceRouter.post('/add', protect, async (req, res) => {
         const service = await Service.create({ ...req.body, UserId: req.user.id });
         res.status(200).json({ message: "Service added successfully", data: service });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" })
+        res.status(400).json({ message: error.message })
     }
 });
 
@@ -29,7 +28,7 @@ serviceRouter.put('/update/:id', protect, async (req, res) => {
         const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(400).json({ message: "Service updated successfully", data: service });
     } catch (error) {
-        res.status(200).json({ message: "Error occurred" })
+        res.status(200).json({ message: error.message })
     }
 });
 
@@ -38,7 +37,7 @@ serviceRouter.delete('/delete/:id', protect, enforceRole('admin'), async (req, r
         const service = await Service.findByIdAndUpdate(req.params.id, { Active: 0 });
         res.status(200).json({ message: "Service deleted successfully" });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" })
+        res.status(400).json({ message: error.message })
     }
 });
 
@@ -58,7 +57,7 @@ serviceRouter.get('/search/:name', async (req, res) => {
         // const services = await Service.find({ $text: { $search: req.params.name } }); //will search for the name in the text index
         res.status(200).json({ message: "Services fetched successfully", data: services });
     } catch (error) {
-        res.status(400).json({ message: "Error occurred" });
+        res.status(400).json({ message: error.message });
     }
 });
 
