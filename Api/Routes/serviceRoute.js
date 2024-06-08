@@ -44,8 +44,18 @@ serviceRouter.delete('/delete/:id', protect, enforceRole('admin'), async (req, r
 
 serviceRouter.get('/search/:name', async (req, res) => {
     try {
-        // const services = await Service.find({ name: { $regex: req.params.name, $options: 'i' } }); // case insensitive search
-        const services = await Service.find({ $text: { $search: req.params.name } }); //will search for the name in the text index
+        // const services = await Service.find({ name: { $regex: RegExp(req.params.name), $options: 'i' } }); // case insensitive search
+
+        const services = await Service.aggregate([{
+            $match: {
+                name: {
+                    $regex: req.params.name,
+                    '$options': 'i'
+                }
+            }
+        }]);
+
+        // const services = await Service.find({ $text: { $search: req.params.name } }); //will search for the name in the text index
         res.status(200).json({ message: "Services fetched successfully", data: services });
     } catch (error) {
         res.status(400).json({ message: "Error occurred" });
