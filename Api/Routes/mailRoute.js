@@ -58,7 +58,7 @@ mailRouter.post('/send/welcome', async (req, res) => {
                 console.log(error);
                 res.status(500).send(error);
             } else {
-                Mail.create({ Email, Body: 'Welcome', Name }).then(() => {
+                Mail.create({ Email, Body: 'Welcome', Name: link }).then(() => {
                     res.status(200).send({ message: 'Email sent successfully ' });
                 }).catch((error) => {
                     res.status(500).send({ message: error.message });
@@ -72,7 +72,7 @@ mailRouter.post('/send/welcome', async (req, res) => {
 
 mailRouter.post('/send/resetPassword', async (req, res) => {
     try {
-        const { Name, Email } = req.body;
+        const { Email } = req.body;
         const Code = await generateUniqueCode();
         const mailOptions = {
             from: 'serviceapp@ankitpdl.me', // replace with your email
@@ -87,8 +87,8 @@ mailRouter.post('/send/resetPassword', async (req, res) => {
                 console.log(error);
                 res.status(500).send(error);
             } else {
-                Mail.create({ Email, Body: 'password reset', Code, Name }).then(() => {
-                    res.status(200).send({ message: 'Email sent successfully ' });
+                Mail.create({ Email, Body: 'password reset', Code }).then(() => {
+                    res.status(200).send({ message: 'Email sent successfully ', data: Code });
                 }).catch((error) => {
                     res.status(500).send({ message: error.message });
                 });

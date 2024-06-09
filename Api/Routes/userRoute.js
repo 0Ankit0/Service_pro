@@ -147,4 +147,17 @@ userRouter.post('/logout', protect, async (req, res) => {
     }
 });
 
+userRouter.post('/changePassword', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).exec();
+        const isValid = await comparePassword(user.Password, req.body.OldPassword);
+        if (!isValid) return res.status(401).json({ message: "Invalid password" });
+        const hash = await hashPassword(req.body.NewPassword);
+        await User.findByIdAndUpdate(req.user.id, { Password: hash });
+        res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 export default userRouter;

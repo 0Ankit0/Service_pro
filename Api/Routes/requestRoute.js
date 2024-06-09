@@ -5,8 +5,12 @@ const requestRouter = Router();
 
 requestRouter.get('/', async (req, res) => {
     try {
-
-        var requests = await Request.find({}).lean().exec();
+        var requests = await Request.find({
+            $or: [
+                { userid: req.body.id },
+                { providerid: req.body.id }
+            ]
+        }).lean().exec();
         res.status(200).json({ message: "Requests fetched successfully", data: requests });
     } catch (error) {
         res.status(400).json({ message: error.message });
