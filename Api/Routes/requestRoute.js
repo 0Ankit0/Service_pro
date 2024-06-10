@@ -52,4 +52,22 @@ requestRouter.post('/cancel/:id', async (req, res) => {
     }
 });
 
+requestRouter.post('/accept/:id', async (req, res) => {
+    try {
+        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "accepted" });
+        res.status(200).json({ message: "Request accepted successfully", data: request });
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
+requestRouter.post('/reject/:id', async (req, res) => {
+    try {
+        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "rejected" });
+        res.status(200).json({ message: "Request rejected successfully", data: request });
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
 export default requestRouter;
