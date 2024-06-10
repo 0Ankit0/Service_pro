@@ -30,7 +30,7 @@ mailRouter.post('/send', async (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
-                res.status(500).send(error);
+                res.status(400).send(error.message);
             } else {
                 res.status(200).send({ message: 'Email sent successfully ' });
             }
@@ -56,12 +56,12 @@ mailRouter.post('/send/welcome', async (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
-                res.status(500).send(error);
+                res.status(400).send(error.message);
             } else {
                 Mail.create({ Email, Body: 'Welcome', Name: link }).then(() => {
                     res.status(200).send({ message: 'Email sent successfully ' });
                 }).catch((error) => {
-                    res.status(500).send({ message: error.message });
+                    res.status(400).send({ message: error.message });
                 });
             }
         });
