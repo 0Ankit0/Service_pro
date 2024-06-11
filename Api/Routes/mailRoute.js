@@ -392,7 +392,7 @@ mailRouter.post('/send/welcome', async (req, res) => {
             from: 'serviceapp@ankitpdl.me', // replace with your email
             to: Email, // recipient's email
             subject: 'Welcome To Service App', // replace with your subject
-            text: welcomeTemplate(link) // email body
+            html: welcomeTemplate(link) // email body
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -420,7 +420,7 @@ mailRouter.post('/send/resetPassword', async (req, res) => {
             from: 'serviceapp@ankitpdl.me', // replace with your email
             to: Email, // recipient's email
             subject: 'Password Reset', // replace with your subject
-            text: resetPasswordTemplate(Code) // email body
+            html: resetPasswordTemplate(Code) // email body
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
