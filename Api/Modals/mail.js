@@ -26,7 +26,7 @@ const generateUniqueCode = async () => {
 
     while (codeExists) {
         code = Math.floor(100000 + Math.random() * 900000).toString();
-        codeExists = await Code.findOne({ code });
+        codeExists = await Mail.findOne({ code });
     }
 
     return code;
