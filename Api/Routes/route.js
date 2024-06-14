@@ -29,7 +29,7 @@ const uploadsDir = path.join(__dirname, '..', 'uploads');
 app.use('/uploads', express.static(uploadsDir));
 app.use('/upload', uploadRouter);
 
-app.use('/mail', protect, mailRouter);
+app.use('/mail', mailRouter);
 app.use('/message', protect, messageRouter);
 app.use('/category', CategoryRouter);
 app.use('/feedback', protect, feedbackRouter);
