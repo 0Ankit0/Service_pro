@@ -19,7 +19,7 @@ const requestSchema = new mongoose.Schema({
     DateTime: { type: Date, default: Date.now },
     Status: {
         type: String,
-        enum: ['pending', 'accepted', 'completed', 'cancelled'],
+        enum: ['pending', 'accepted', 'completed', 'cancelled', 'rejected'],
         default: 'pending'
     },
     Active: { type: Boolean, default: true }

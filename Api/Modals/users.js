@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'provider', 'admin'],
         default: 'user'
     },
-    Image: [{
+    ProfileImg: {
+        type: String
+    },
+    Documents: [{
         type: String
     }],
     Verified: {
