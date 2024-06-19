@@ -11,6 +11,11 @@ const feedbackSchema = new mongoose.Schema({
         ref: 'Service',
         required: true
     },
+    ProviderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     Rating: { type: Number, required: true },
     Comment: { type: String },
     Active: { type: Boolean, default: true }
