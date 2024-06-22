@@ -5,16 +5,39 @@ Table users {
   Password varchar
   PhoneNo integer
   Address varchar
-  Role Role 
-  Image varchar
-  Active integer [default: 1]
+  Role Role [default: 'user']
+  ProfileImg varchar
+  Active boolean [default: true]
+  Verified boolean [default: false]
   created_at timestamp
+  updated_at timestamp
 }
 
 Enum Role {
   user
   provider
   admin
+}
+
+Table documents {
+  _id integer [primary key]
+  UserId integer [ref: > users._id, not null]
+  Document varchar
+}
+
+Table user_services {
+  _id integer [primary key]
+  UserId integer [ref: > users._id, not null]
+  ServiceId integer [ref: > services._id, not null]
+}
+
+Table service_analytics {
+  _id integer [primary key]
+  UserId integer [ref: > users._id, not null]
+  TotalServices integer [default: 0]
+  CompletedServices integer [default: 0]
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table services {
@@ -25,16 +48,19 @@ Table services {
   Duration varchar
   Image varchar
   created_at timestamp
+  updated_at timestamp
 }
 
 Table requests {
   _id integer [primary key]
   UserId integer [ref: > users._id, not null]
   ServiceId integer [ref: > services._id, not null]
-  Date varchar [not null]
-  Time varchar [not null]
-  Status varchar [not null]
+  ProviderId integer [ref: > users._id]
+  Image varchar
+  DateTime timestamp 
+  Status varchar [not null, default: 'pending']
   created_at timestamp
+  updated_at timestamp
 }
 
 Table messages {
@@ -43,32 +69,39 @@ Table messages {
   sender_id integer [ref: > users._id, not null]
   receiver_id integer [ref: > users._id, not null]
   created_at timestamp
+  updated_at timestamp
 }
 
 Table mails {
   _id integer [primary key]
   Email varchar [not null]
   Body varchar [not null]
+  Code varchar
+  Name varchar
   created_at timestamp
+  updated_at timestamp
 }
 
 Table feedbacks {
   _id integer [primary key]
   UserId integer [ref: > users._id, not null]
   ServiceId integer [ref: > services._id, not null]
+  ProviderId integer [ref: > users._id, not null]
   Rating float [not null]
-  Comment varchar [not null]
+  Comment varchar
   created_at timestamp
+  updated_at timestamp
 }
 
 Table chat_groups {
   _id integer [primary key]
   Name varchar [not null]
   created_at timestamp
+  updated_at timestamp
 }
 
 Table chat_group_members {
-  id integer [primary key]
+  _id integer [primary key]
   chat_group_id integer [ref: > chat_groups._id, not null]
   user_id integer [ref: > users._id, not null]
 }
@@ -79,10 +112,24 @@ Table categories {
   Description varchar
   Image varchar
   created_at timestamp
+  updated_at timestamp
 }
 
 Table category_services {
-  id integer [primary key]
+  _id integer [primary key]
   category_id integer [ref: > categories._id, not null]
   service_id integer [ref: > services._id, not null]
+}
+
+Table login_logs {
+  _id integer [primary key]
+  Token varchar [not null]
+  UserId integer [ref: > users._id, not null]
+  Name varchar [not null]
+  loginTime timestamp [not null]
+  logoutTime timestamp
+  ipAddress varchar [not null]
+  Machine varchar [not null]
+  created_at timestamp
+  updated_at timestamp
 }
