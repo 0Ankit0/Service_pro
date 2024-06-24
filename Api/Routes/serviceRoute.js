@@ -40,7 +40,7 @@ serviceRouter.delete('/delete/:id', protect, enforceRole('admin'), async (req, r
         res.status(400).json({ message: error.message })
     }
 });
-
+//Todo: Add a route to search for services by name
 serviceRouter.get('/search/:name', async (req, res) => {
     try {
         // const services = await Service.find({ name: { $regex: RegExp(req.params.name), $options: 'i' } }); // case insensitive search

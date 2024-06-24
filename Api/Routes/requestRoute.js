@@ -54,8 +54,12 @@ requestRouter.post('/cancel/:id', async (req, res) => {
 
 requestRouter.post('/accept/:id', async (req, res) => {
     try {
-        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "accepted" });
+        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "accepted" }, { new: true });
+        if (request.Status === "accepted") {
+            User.findByIdAndUpdate(request._id, { $inc: { "ServiceAnalytics.TotalServices": 1 } });
+        }
         res.status(200).json({ message: "Request accepted successfully", data: request });
+
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -65,6 +69,18 @@ requestRouter.post('/reject/:id', async (req, res) => {
     try {
         const request = await Request.findByIdAndUpdate(req.params.id, { Status: "rejected" });
         res.status(200).json({ message: "Request rejected successfully", data: request });
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
+requestRouter.post('/complete/:id', async (req, res) => {
+    try {
+        const request = await Request.findByIdAndUpdate(req.params.id, { Status: "completed" }, { new: true });
+        if (request.Status === "completed") {
+            User.findByIdAndUpdate(request._id, { $inc: { "ServiceAnalytics.CompletedServices": 1 } });
+        }
+        res.status(200).json({ message: "Request completed successfully", data: request });
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
