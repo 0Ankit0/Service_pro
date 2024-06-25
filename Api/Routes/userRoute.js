@@ -100,6 +100,45 @@ userRouter.get('/verifyAccount', async (req, res) => {
     }
 });
 
+userRouter.get('/resetPassword', async (req, res) => {
+    try {
+        var randomPassword = 'kshf039hH'
+        await User.findByIdAndUpdate(req.query.id, { Password: randomPassword });
+        res.status(200).send(
+            `<!DOCTYPE html>
+            <html>
+              <head>
+                <title>Password Changed</title>
+                <style>
+                  body{
+              padding: 25px;
+            }
+            .title {
+                color: #5C6AC4;
+            }
+                </style>
+              </head>
+              <body>
+                  <h2 class="title">Your Password has been reset successfully.Your new password is</h2>
+                  <h1 class="title">${randomPassword}</h1>
+                  <p id="currentTime"></p>
+                  <script type="text/javascript">
+                    function showTime() {
+                document.getElementById('currentTime').innerHTML = new Date().toUTCString();
+            }
+            showTime();
+            setInterval(function () {
+                showTime();
+            }, 1000);
+                  </script>
+              </body>
+            </html>`
+        );
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
 userRouter.delete('/profile', async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.user._id, { Active: 0 });

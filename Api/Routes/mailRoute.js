@@ -5,6 +5,7 @@ import { protect } from "../Middleware/auth.js";
 import { generateUniqueCode } from "../Modals/mail.js";
 import * as dotenv from 'dotenv';
 import mg from 'nodemailer-mailgun-transport';
+import { User } from "../Modals/users.js";
 dotenv.config();
 
 const mailRouter = Router();
@@ -129,7 +130,7 @@ background-color: #f6f6f6;
 </html>`
 }
 
-function resetPasswordTemplate(code) {
+function resetPasswordTemplate(link) {
   return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -262,7 +263,7 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
                 <td height="14" style="height:14px; font-size:0px; line-height:0px;">&nbsp;</td>
               </tr>
               <tr>
-                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">It happens to the best of us. The good news is you can change it&nbsp;right&nbsp;now using the code below.</td>
+                <td class="em_grey" align="center" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 26px; color:#434343;">It happens to the best of us. The good news is you can reset it.Get your new password by clicking the link below.</td>
               </tr>
               <tr>
                 <td height="26" style="height:26px;" class="em_h20">&nbsp;</td>
@@ -270,7 +271,7 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
               <tr>
                 <td align="center" valign="top"><table width="250" style="width:250px; background-color:#6bafb2; border-radius:4px;" border="0" cellspacing="0" cellpadding="0" align="center">
                   <tr>
-                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="https://www.mailgun.com" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">${code}</a></td>
+                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="https://www.mailgun.com" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">${link}</a></td>
                   </tr>
                 </table>
                 </td>
@@ -416,12 +417,16 @@ mailRouter.post('/send/welcome', protect, async (req, res) => {
 mailRouter.post('/send/resetPassword', async (req, res) => {
   try {
     const { Email } = req.body;
-    const Code = await generateUniqueCode();
+    const user = await User.find({ Email: Email }).catch((error) => {
+      res.status(500).send({ message: "Can't find the user with th specified email in our database." });
+    })
+    const link = `http://20.52.185.247:8000/user/resetPassword?id=${user._id}`;
+    // const Code = await generateUniqueCode();
     const mailOptions = {
       from: 'serviceapp@ankitpdl.me', // replace with your email
       to: Email, // recipient's email
       subject: 'Password Reset', // replace with your subject
-      html: resetPasswordTemplate(Code) // email body
+      html: resetPasswordTemplate(link) // email body
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
