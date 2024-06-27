@@ -7,8 +7,8 @@ feedbackRouter.get("/user/:userId", async (req, res) => {
   try {
     var feedbacks = await Feedback.find({ UserId: req.params.userId })
       .populate("ServiceId")
-      .populate({ path: "UserId", select: "Name" })
-      .populate({ path: "ProviderId", select: "Name" })
+      .populate({ path: "UserId" })
+      .populate({ path: "ProviderId" })
       .lean()
       .exec();
     res
@@ -22,8 +22,8 @@ feedbackRouter.get("/provider/:providerId", async (req, res) => {
   try {
     var feedbacks = await Feedback.find({ ProviderId: req.params.providerId })
       .populate("ServiceId")
-      .populate({ path: "UserId", select: "Name" })
-      .populate({ path: "ProviderId", select: "Name" })
+      .populate({ path: "UserId" })
+      .populate({ path: "ProviderId" })
       .lean()
       .exec();
     res
