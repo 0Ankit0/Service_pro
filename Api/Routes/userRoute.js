@@ -40,12 +40,15 @@ userRouter.post("/login", limiter, async (req, res) => {
       Name: user.Name,
     });
 
-    res
-      .status(200)
-      .json({
-        message: "Success",
-        data: { token: token, Role: user.Role, Verified: user.Verified },
-      });
+    res.status(200).json({
+      message: "Success",
+      data: {
+        token: token,
+        Role: user.Role,
+        Verified: user.Verified,
+        Active: user.Active,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ token: "", message: error.message });
@@ -178,14 +181,19 @@ userRouter.delete("/profile", protect, async (req, res) => {
   }
 });
 
-userRouter.delete("/delete/:id", enforceRole("admin"), protect, async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+userRouter.delete(
+  "/delete/:id",
+  enforceRole("admin"),
+  protect,
+  async (req, res) => {
+    try {
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   }
-});
+);
 
 userRouter.get("/service/:serviceId", async (req, res) => {
   try {
@@ -212,14 +220,19 @@ userRouter.get("/search/:userName", async (req, res) => {
   }
 });
 
-userRouter.get("/activate/:userId", protect, enforceRole("admin"), async (req, res) => {
-  try {
-    await User.findByIdAndUpdate(req.params.userId, { Active: 1 });
-    res.status(200).json({ message: "User activated successfully" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+userRouter.get(
+  "/activate/:userId",
+  protect,
+  enforceRole("admin"),
+  async (req, res) => {
+    try {
+      await User.findByIdAndUpdate(req.params.userId, { Active: 1 });
+      res.status(200).json({ message: "User activated successfully" });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   }
-});
+);
 
 userRouter.post("/logout", protect, async (req, res) => {
   try {
