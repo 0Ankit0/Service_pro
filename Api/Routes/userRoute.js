@@ -178,7 +178,7 @@ userRouter.delete("/profile", protect, async (req, res) => {
   }
 });
 
-userRouter.delete(":id", enforceRole("admin"), protect, async (req, res) => {
+userRouter.delete("/delete/:id", enforceRole("admin"), protect, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "User deleted successfully" });
