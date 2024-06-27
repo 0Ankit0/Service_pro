@@ -1,5 +1,6 @@
 import { Request } from "../Modals/requests.js";
 import { Router } from "express";
+import { User } from "../Modals/users.js";
 
 const requestRouter = Router();
 

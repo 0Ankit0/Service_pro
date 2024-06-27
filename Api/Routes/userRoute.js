@@ -169,9 +169,18 @@ userRouter.get("/resetPassword", async (req, res) => {
   }
 });
 
-userRouter.delete("/profile", async (req, res) => {
+userRouter.delete("/profile", protect, async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.user._id, { Active: 0 });
+    await User.findByIdAndUpdate(req.user.id, { Active: 0 });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+userRouter.delete(":id", enforceRole("admin"), protect, async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -203,7 +212,7 @@ userRouter.get("/search/:userName", async (req, res) => {
   }
 });
 
-userRouter.get("/activate/:userId", enforceRole("admin"), async (req, res) => {
+userRouter.get("/activate/:userId", protect, enforceRole("admin"), async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.userId, { Active: 1 });
     res.status(200).json({ message: "User activated successfully" });
