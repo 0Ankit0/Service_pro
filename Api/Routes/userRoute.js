@@ -136,7 +136,8 @@ function makeRandomString(length) {
 userRouter.get("/resetPassword", async (req, res) => {
   try {
     var randomPassword = makeRandomString(6);
-    await User.findByIdAndUpdate(req.query.id, { Password: randomPassword });
+    const hash = await hashPassword(randomPassword);
+    await User.findByIdAndUpdate(req.query.id, { Password: hash });
     res.status(200).send(
       `<!DOCTYPE html>
             <html>
@@ -183,11 +184,11 @@ userRouter.delete("/profile", protect, async (req, res) => {
 
 userRouter.delete(
   "/delete/:id",
-  enforceRole("admin"),
   protect,
+  enforceRole("admin"),
   async (req, res) => {
     try {
-      await User.findByIdAndDelete(req.params.id);
+      await User.findByIdAndDelete(req.params.id, { Active: false });
       res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
       res.status(400).json({ message: error.message });

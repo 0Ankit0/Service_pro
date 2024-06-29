@@ -3,8 +3,8 @@ import nodemailer from "nodemailer";
 import { Mail } from "../Modals/mail.js";
 import { protect } from "../Middleware/auth.js";
 import { generateUniqueCode } from "../Modals/mail.js";
-import * as dotenv from 'dotenv';
-import mg from 'nodemailer-mailgun-transport';
+import * as dotenv from "dotenv";
+import mg from "nodemailer-mailgun-transport";
 import { User } from "../Modals/users.js";
 dotenv.config();
 
@@ -13,20 +13,20 @@ const mailRouter = Router();
 const auth = {
   auth: {
     api_key: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMAIN
-  }
-}
+    domain: process.env.MAILGUN_DOMAIN,
+  },
+};
 const transporter = nodemailer.createTransport(mg(auth));
 
-mailRouter.post('/send', protect, async (req, res) => {
+mailRouter.post("/send", protect, async (req, res) => {
   try {
     const { Email, Body } = req.body;
 
     const mailOptions = {
-      from: 'serviceapp@ankitpdl.me', // replace with your email
+      from: "serviceapp@ankitpdl.me", // replace with your email
       to: Email, // recipient's email
-      subject: 'Mail Subject', // replace with your subject
-      text: Body // email body
+      subject: "Mail Subject", // replace with your subject
+      text: Body, // email body
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -34,13 +34,12 @@ mailRouter.post('/send', protect, async (req, res) => {
         console.log(error);
         res.status(400).send(error.message);
       } else {
-        res.status(200).send({ message: 'Email sent successfully ' });
+        res.status(200).send({ message: "Email sent successfully " });
       }
     });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
-
 });
 function welcomeTemplate(link) {
   return `<!DOCTYPE html>
@@ -127,7 +126,7 @@ background-color: #f6f6f6;
     </td>
     <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
   </tr></table></body>
-</html>`
+</html>`;
 }
 
 function resetPasswordTemplate(link) {
@@ -271,7 +270,7 @@ u + .em_body .em_full_wrap { width:100% !important; width:100vw !important;}
               <tr>
                 <td align="center" valign="top"><table width="250" style="width:250px; background-color:#6bafb2; border-radius:4px;" border="0" cellspacing="0" cellpadding="0" align="center">
                   <tr>
-                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="https://www.mailgun.com" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">${link}</a></td>
+                    <td class="em_white" height="42" align="center" valign="middle" style="font-family: Arial, sans-serif; font-size: 16px; color:#ffffff; font-weight:bold; height:42px;"><a href="${link}" target="_blank" style="text-decoration:none; color:#ffffff; line-height:42px; display:block;">${link}</a></td>
                   </tr>
                 </table>
                 </td>
@@ -381,32 +380,32 @@ Just ignore this email the way your cat ignores&nbsp;you.</td>
     </tr>
 </table>
 </body>
-</html>`
+</html>`;
 }
 
-
-mailRouter.post('/send/welcome', protect, async (req, res) => {
+mailRouter.post("/send/welcome", protect, async (req, res) => {
   try {
     const link = `http://20.52.185.247:8000/user/verifyAccount?id=${req.body.id}`;
     const { Email } = req.body;
 
     const mailOptions = {
-      from: 'serviceapp@ankitpdl.me', // replace with your email
+      from: "serviceapp@ankitpdl.me", // replace with your email
       to: Email, // recipient's email
-      subject: 'Welcome To Service App', // replace with your subject
-      html: welcomeTemplate(link) // email body
+      subject: "Welcome To Service App", // replace with your subject
+      html: welcomeTemplate(link), // email body
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
         res.status(400).send(error.message);
       } else {
-        Mail.create({ Email, Body: link, Name: 'Welcome' }).then(() => {
-          res.status(200).send({ message: 'Email sent successfully ' });
-        }).catch((error) => {
-          res.status(400).send({ message: error.message });
-        });
+        Mail.create({ Email, Body: link, Name: "Welcome" })
+          .then(() => {
+            res.status(200).send({ message: "Email sent successfully " });
+          })
+          .catch((error) => {
+            res.status(400).send({ message: error.message });
+          });
       }
     });
   } catch (error) {
@@ -414,36 +413,41 @@ mailRouter.post('/send/welcome', protect, async (req, res) => {
   }
 });
 
-mailRouter.post('/send/resetPassword', async (req, res) => {
+mailRouter.post("/send/resetPassword", async (req, res) => {
   try {
     const { Email } = req.body;
-    const user = await User.find({ Email: Email }).catch((error) => {
-      res.status(500).send({ message: "Can't find the user with th specified email in our database." });
-    })
-    const link = `http://20.52.185.247:8000/user/resetPassword?id=${user._id}`;
-    // const Code = await generateUniqueCode();
-    const mailOptions = {
-      from: 'serviceapp@ankitpdl.me', // replace with your email
-      to: Email, // recipient's email
-      subject: 'Password Reset', // replace with your subject
-      html: resetPasswordTemplate(link) // email body
-    };
+    try {
+      const user = await User.find({ Email: Email });
+      const link = `http://20.52.185.247:8000/user/resetPassword?id=${user[0]._id}`;
+      // const Code = await generateUniqueCode();
+      const mailOptions = {
+        from: "serviceapp@ankitpdl.me", // replace with your email
+        to: Email, // recipient's email
+        subject: "Password Reset", // replace with your subject
+        html: resetPasswordTemplate(link), // email body
+      };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        res.status(500).send(error);
-      } else {
-        Mail.create({ Email, Body: 'password reset', Code }).then(() => {
-          res.status(200).send({ message: 'Email sent successfully ', data: Code });
-        }).catch((error) => {
-          res.status(500).send({ message: error.message });
-        });
-      }
-    });
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send(error);
+        } else {
+          Mail.create({ Email, Body: "password reset" })
+            .then(() => {
+              res.status(200).send({ message: "Email sent successfully " });
+            })
+            .catch((error) => {
+              res.status(500).send({ message: error.message });
+            });
+        }
+      });
+    } catch (error) {
+      return res.status(500).send({
+        message: "Can't find the user with th specified email in our database.",
+      });
+    }
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
-
 });
 export default mailRouter;
