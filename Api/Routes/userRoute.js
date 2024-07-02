@@ -210,9 +210,10 @@ userRouter.get("/service/:serviceId", async (req, res) => {
 
 userRouter.get("/search/:userName", async (req, res) => {
   try {
-    const users = await User.find({ $text: { $search: req.params.userName } })
-      .lean()
-      .exec();
+    // const users = await User.find({ $text: { $search: req.params.userName } })
+    //   .lean()
+    //   .exec();
+    const users = await User.find({ userName: { $regex: req.params.userName, $options: 'i' } });
     res
       .status(200)
       .json({ message: "Users fetched successfully", data: users });
