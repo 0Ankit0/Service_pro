@@ -127,4 +127,9 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contributions
 Contributions are welcome! Please submit a pull request or open an issue for any suggestions or bug reports.
 
+### Contributors
+- [Ankit Poudyal](mailto:ankitpaudel.1373@gmail.com): Backend development and project management.
+- [m0dern6](https://github.com/m0dern6): Development of the Flutter applications.
+
+
 
