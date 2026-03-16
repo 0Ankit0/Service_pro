@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:service_pro_user/UI/Request/service_request.dart';
 import 'package:service_pro_user/UI/chat/chat_screen.dart';
 import 'package:service_pro_user/UI/service_providers/service_provider_details.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class ServiceProviders extends StatefulWidget {
   final dynamic serviceData;
@@ -31,7 +32,7 @@ class _ServiceProvidersState extends State<ServiceProviders> {
     });
     try {
       final response = await http.get(Uri.parse(
-          'http://20.52.185.247:8000/user/service/${widget.serviceData['_id']}'));
+          ApiConfig.baseUrl + '/user/service/${widget.serviceData['_id']}'));
       if (response.statusCode == 200) {
         setState(() {
           serviceProviders = jsonDecode(response.body)['data'] as List;

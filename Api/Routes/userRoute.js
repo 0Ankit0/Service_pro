@@ -12,23 +12,40 @@ import { LoginLog } from "../Modals/LoginLog.js";
 import mongoose from "mongoose";
 
 const userRouter = Router();
+const SAFE_USER_FIELDS = "-Password -__v";
 
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 3, // limit each IP to 5 requests per windowMs
-  handler: function (req, res /*next*/) {
-    const retryAfter = Math.ceil(res.getHeaders()["retry-after"] / 60); // Get the Retry-After header and convert it to minutes
+  windowMs: 1 * 60 * 1000,
+  max: 3,
+  handler: function (req, res) {
+    const retryAfterSeconds = Number(res.getHeaders()["retry-after"] || 60);
+    const retryAfterMinutes = Math.ceil(retryAfterSeconds / 60);
     res.status(429).json({
-      message: `Too many password retries, please try again after ${retryAfter} minutes`,
+      message: `Too many password retries, please try again after ${retryAfterMinutes} minutes`,
     });
   },
 });
 
+const validatePasswordStrength = (password) =>
+  typeof password === "string" && password.length >= 8;
+
 userRouter.post("/login", limiter, async (req, res) => {
   try {
-    const user = await User.findOne({ Email: req.body.Email }).exec();
-    const isValid = await comparePassword(user.Password, req.body.Password);
-    if (!isValid) return res.status(401).json({ message: "Invalid password" });
+    const { Email, Password } = req.body;
+    if (!Email || !Password) {
+      return res.status(400).json({ message: "Email and Password are required" });
+    }
+
+    const user = await User.findOne({ Email }).exec();
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isValid = await comparePassword(user.Password, Password);
+    if (!isValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
     const token = createJWT(user);
 
     await LoginLog.create({
@@ -40,10 +57,10 @@ userRouter.post("/login", limiter, async (req, res) => {
       Name: user.Name,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Success",
       data: {
-        token: token,
+        token,
         Role: user.Role,
         Verified: user.Verified,
         Active: user.Active,
@@ -51,45 +68,62 @@ userRouter.post("/login", limiter, async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ token: "", message: error.message });
+    return res.status(400).json({ token: "", message: error.message });
   }
 });
 
 userRouter.post("/signup", async (req, res) => {
   try {
+    if (!validatePasswordStrength(req.body.Password)) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters long" });
+    }
+
     const hash = await hashPassword(req.body.Password);
     const user = await User.create({ ...req.body, Password: hash });
-    res.status(200).json({ data: user, message: "User created successfully" });
+    const safeUser = await User.findById(user._id).select(SAFE_USER_FIELDS).lean().exec();
+
+    return res
+      .status(200)
+      .json({ data: safeUser, message: "User created successfully" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 
 userRouter.get("/profile", protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).lean().exec();
-    res.status(200).json({ data: user, message: "User fetched successfully" });
+    const user = await User.findById(req.user.id).select(SAFE_USER_FIELDS).lean().exec();
+    return res.status(200).json({ data: user, message: "User fetched successfully" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 
 userRouter.put("/profile", protect, async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
+    const updates = { ...req.body };
+    delete updates.Password;
+    delete updates.Role;
+
+    const user = await User.findByIdAndUpdate(req.user.id, updates, {
       new: true,
-    });
-    res.status(200).json({ message: "User updated successfully", data: user });
+    })
+      .select(SAFE_USER_FIELDS)
+      .lean()
+      .exec();
+
+    return res.status(200).json({ message: "User updated successfully", data: user });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 
 userRouter.get("/verifyAccount", async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.query.id, { Verified: true });
-    res.status(200).send(
-      `<!DOCTYPE html>
+    res.status(200).send(`<!DOCTYPE html>
             <html>
               <head>
                 <title>Account Verified</title>
@@ -115,8 +149,7 @@ userRouter.get("/verifyAccount", async (req, res) => {
             }, 1000);
                   </script>
               </body>
-            </html>`
-    );
+            </html>`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -135,11 +168,10 @@ function makeRandomString(length) {
 
 userRouter.get("/resetPassword", async (req, res) => {
   try {
-    var randomPassword = makeRandomString(6);
+    const randomPassword = makeRandomString(10);
     const hash = await hashPassword(randomPassword);
     await User.findByIdAndUpdate(req.query.id, { Password: hash });
-    res.status(200).send(
-      `<!DOCTYPE html>
+    res.status(200).send(`<!DOCTYPE html>
             <html>
               <head>
                 <title>Password Changed</title>
@@ -166,8 +198,7 @@ userRouter.get("/resetPassword", async (req, res) => {
             }, 1000);
                   </script>
               </body>
-            </html>`
-    );
+            </html>`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -175,7 +206,7 @@ userRouter.get("/resetPassword", async (req, res) => {
 
 userRouter.delete("/profile", protect, async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.user.id, { Active: 0 });
+    await User.findByIdAndUpdate(req.user.id, { Active: false });
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -199,6 +230,7 @@ userRouter.delete(
 userRouter.get("/service/:serviceId", async (req, res) => {
   try {
     const users = await User.find({ Services: { $in: req.params.serviceId } })
+      .select(SAFE_USER_FIELDS)
       .populate("Services")
       .lean()
       .exec();
@@ -210,10 +242,11 @@ userRouter.get("/service/:serviceId", async (req, res) => {
 
 userRouter.get("/search/:userName", async (req, res) => {
   try {
-    // const users = await User.find({ $text: { $search: req.params.userName } })
-    //   .lean()
-    //   .exec();
-    const users = await User.find({ userName: { $regex: req.params.userName, $options: 'i' } });
+    const users = await User.find({ Name: { $regex: req.params.userName, $options: "i" } })
+      .select(SAFE_USER_FIELDS)
+      .lean()
+      .exec();
+
     res
       .status(200)
       .json({ message: "Users fetched successfully", data: users });
@@ -228,10 +261,14 @@ userRouter.get(
   enforceRole("admin"),
   async (req, res) => {
     try {
-      await User.findByIdAndUpdate(req.params.userId, { Active: 1 });
-      res.status(200).json({ message: "User activated successfully" });
+      if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
+        return res.status(400).json({ message: "Invalid user id" });
+      }
+
+      await User.findByIdAndUpdate(req.params.userId, { Active: true });
+      return res.status(200).json({ message: "User activated successfully" });
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
   }
 );
@@ -251,14 +288,21 @@ userRouter.post("/logout", protect, async (req, res) => {
 
 userRouter.post("/changePassword", protect, async (req, res) => {
   try {
+    if (!validatePasswordStrength(req.body.NewPassword)) {
+      return res
+        .status(400)
+        .json({ message: "New password must be at least 8 characters long" });
+    }
+
     const user = await User.findById(req.user.id).exec();
     const isValid = await comparePassword(user.Password, req.body.OldPassword);
     if (!isValid) return res.status(401).json({ message: "Invalid password" });
+
     const hash = await hashPassword(req.body.NewPassword);
     await User.findByIdAndUpdate(req.user.id, { Password: hash });
-    res.status(200).json({ message: "Password changed successfully" });
+    return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 

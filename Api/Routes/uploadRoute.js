@@ -9,13 +9,14 @@ import { dirname } from "path";
 const uploadRouter = Router();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, "../uploads");
+const publicBaseUrl = (process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 8000}`).replace(/\/$/, "");
 
 uploadRouter.get("/", async (req, res) => {
   //this is /upload/index page
   try {
     const fileUrls = fs
       .readdirSync(uploadsDir)
-      .map((file) => `http://20.52.185.247:8000/uploads/${file}`);
+      .map((file) => `${publicBaseUrl}/uploads/${file}`);
     res.status(200).send({ files: fileUrls.join(", ") });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -42,7 +43,7 @@ uploadRouter.post("/file", upload.single("file"), (req, res) => {
   try {
     const fileUrl = req.file.path;
 
-    res.status(200).send(`http://20.52.185.247:8000/${fileUrl}`);
+    res.status(200).send(`${publicBaseUrl}/${fileUrl}`);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

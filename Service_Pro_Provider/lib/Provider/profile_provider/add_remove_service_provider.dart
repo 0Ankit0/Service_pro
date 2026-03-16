@@ -4,13 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:service_pro_provider/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class ServiceManage with ChangeNotifier {
   Future<void> serviceManage(BuildContext context, List service) async {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response =
-        await http.put(Uri.parse('http:20.52.185.247:8000/user/profile'),
+        await http.put(Uri.parse(ApiConfig.baseUrl + '/user/profile'),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $token',

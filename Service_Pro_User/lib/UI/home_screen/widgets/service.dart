@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:service_pro_user/Models/category_model.dart';
 import 'package:service_pro_user/UI/service_providers/service_providers.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class Service extends StatefulWidget {
   final CategoryModel category;
@@ -65,7 +66,7 @@ class _ServiceState extends State<Service> {
                   }
 
                   String image = serviceData['Image'].toString();
-                  image = image.replaceFirst('localhost', '20.52.185.247');
+                  image = ApiConfig.normalizeMediaUrl(image);
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

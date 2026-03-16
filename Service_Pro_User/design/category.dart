@@ -65,7 +65,7 @@ class _CategoryState extends State<Category> {
                   itemBuilder: (context, index) {
                     final categories = categoryData[index];
                     String image = categories.image.toString();
-                    image = image.replaceFirst('localhost', '20.52.185.247');
+                    image = image.replaceFirst('localhost', 'localhost');
 
                     return GestureDetector(
                       onTap: () {

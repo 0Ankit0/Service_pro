@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:service_pro_provider/core/api_config.dart';
 
 class ManageCategory extends StatefulWidget {
   const ManageCategory({super.key});
@@ -205,7 +206,7 @@ class _ManageCategoryState extends State<ManageCategory> {
             itemBuilder: (context, index) {
               final categoryItem = data[index];
               String image = categoryItem['Image'].toString();
-              image = image.replaceFirst('localhost', '20.52.185.247');
+              image = ApiConfig.normalizeMediaUrl(image);
               return Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: ListTile(

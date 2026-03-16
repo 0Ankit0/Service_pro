@@ -110,6 +110,20 @@ Service Pro is a comprehensive job service platform consisting of two mobile app
    - Mailgun API key and domain.
    - MongoDB connection string.
 
+
+
+### Runtime Configuration (Environment Variables)
+- **API backend (`Api/.env`)**
+  - `PORT`: API port (example: `8000`)
+  - `HOST`: bind interface (example: `0.0.0.0`)
+  - `PUBLIC_BASE_URL`: public API URL used in generated links (example: `https://api.example.com`)
+  - `JWTSecret`, `MONGODB_URI`, and mail settings as before
+
+- **Flutter apps**
+  - Set API URL at build/run time using Dart define:
+    - `--dart-define=API_BASE_URL=https://api.example.com`
+  - If not provided, apps default to `http://localhost:8000`.
+
 ### Running the Projects
 - **Mobile Applications**: Use Flutter commands to run the apps on simulators or physical devices.
 - **API**:

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:service_pro_provider/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class GetReviewsProvider with ChangeNotifier {
   List<dynamic> getreviews = [];
@@ -11,7 +12,7 @@ class GetReviewsProvider with ChangeNotifier {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.get(
-        Uri.parse('http://20.52.185.247:8000/feedback/provider/$id'),
+        Uri.parse(ApiConfig.baseUrl + '/feedback/provider/$id'),
 
         ///$id yo id pathauni vaneko ho
         headers: {

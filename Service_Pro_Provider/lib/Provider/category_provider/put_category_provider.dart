@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:service_pro_provider/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class UpdateCategory with ChangeNotifier {
   Future<bool> updateCategory(
@@ -12,7 +13,7 @@ class UpdateCategory with ChangeNotifier {
     try {
       print('Updating category with ID: $cid'); // Debug statement
       final response = await http.put(
-        Uri.parse('http://20.52.185.247:8000/category/update/$cid'),
+        Uri.parse(ApiConfig.baseUrl + '/category/update/$cid'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -44,7 +45,7 @@ class UpdateCategory with ChangeNotifier {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://20.52.185.247:8000/upload/file'),
+        Uri.parse(ApiConfig.baseUrl + '/upload/file'),
       );
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
       final response = await request.send();
@@ -73,7 +74,7 @@ class UpdateCategory with ChangeNotifier {
     try {
       print('Updating category with ID: $cid'); // Debug statement
       final response = await http.put(
-        Uri.parse('http://20.52.185.247:8000/category/update/$cid'),
+        Uri.parse(ApiConfig.baseUrl + '/category/update/$cid'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

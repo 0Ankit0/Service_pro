@@ -7,6 +7,7 @@ import 'package:service_pro_user/Provider/search_provider/service_search_provide
 import 'package:service_pro_user/UI/home_screen/widgets/service.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:service_pro_user/UI/service_providers/service_providers.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class CustomCacheManager extends CacheManager {
   static const key = "customCacheKey";
@@ -225,7 +226,7 @@ class _CategoryState extends State<Category> {
                     itemBuilder: (context, index) {
                       final categories = activeCategoryData[index];
                       String image = categories.image.toString();
-                      image = image.replaceFirst('localhost', '20.52.185.247');
+                      image = ApiConfig.normalizeMediaUrl(image);
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class ServiceRequestProvider with ChangeNotifier {
   Future<void> sendServiceRequest(
@@ -17,7 +18,7 @@ class ServiceRequestProvider with ChangeNotifier {
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     try {
       final response = await http.post(
-        Uri.parse('http://20.52.185.247:8000/request/add'),
+        Uri.parse(ApiConfig.baseUrl + '/request/add'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -45,7 +46,7 @@ class ServiceRequestProvider with ChangeNotifier {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://20.52.185.247:8000/upload/file'),
+        Uri.parse(ApiConfig.baseUrl + '/upload/file'),
       );
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
       final response = await request.send();
@@ -68,7 +69,7 @@ class ServiceRequestProvider with ChangeNotifier {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/request/complete/$id'),
+      Uri.parse(ApiConfig.baseUrl + '/request/complete/$id'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -86,7 +87,7 @@ class ServiceRequestProvider with ChangeNotifier {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/request/cancel/$id'),
+      Uri.parse(ApiConfig.baseUrl + '/request/cancel/$id'),
       headers: {
         'Authorization': 'Bearer $token',
       },

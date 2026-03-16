@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class UpdateUserDetails with ChangeNotifier {
   Future<bool> updateUserDetails(
@@ -16,7 +17,7 @@ class UpdateUserDetails with ChangeNotifier {
       final token =
           Provider.of<LoginLogoutProvider>(context, listen: false).token;
       final response = await http.put(
-        Uri.parse('http://20.52.185.247:8000/user/profile'),
+        Uri.parse(ApiConfig.baseUrl + '/user/profile'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
@@ -47,7 +48,7 @@ class UpdateUserDetails with ChangeNotifier {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://20.52.185.247:8000/upload/file'),
+        Uri.parse(ApiConfig.baseUrl + '/upload/file'),
       );
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
       final response = await request.send();
@@ -71,7 +72,7 @@ class UpdateUserDetails with ChangeNotifier {
       final token =
           Provider.of<LoginLogoutProvider>(context, listen: false).token;
       final response = await http.put(
-          Uri.parse('http://20.52.185.247:8000/user/profile'), // Corrected URL
+          Uri.parse(ApiConfig.baseUrl + '/user/profile'), // Corrected URL
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token' // Corrected key
@@ -95,7 +96,7 @@ class UpdateUserDetails with ChangeNotifier {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http
-        .delete(Uri.parse('http://20.52.185.247:8000/user/profile'), headers: {
+        .delete(Uri.parse(ApiConfig.baseUrl + '/user/profile'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     });

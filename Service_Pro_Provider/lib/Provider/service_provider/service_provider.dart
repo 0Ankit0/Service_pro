@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_provider/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class ServiceProvider with ChangeNotifier {
   List<dynamic> _service = [];
@@ -11,7 +12,7 @@ class ServiceProvider with ChangeNotifier {
   Future<void> getServices() async {
     try {
       final response =
-          await http.get(Uri.parse('http://20.52.185.247:8000/service'));
+          await http.get(Uri.parse(ApiConfig.baseUrl + '/service'));
       if (response.statusCode == 200) {
         _service = jsonDecode(response.body)['data'];
         notifyListeners();
@@ -36,7 +37,7 @@ class ServiceProvider with ChangeNotifier {
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     try {
       final reponse =
-          await http.post(Uri.parse('http://20.52.185.247:8000/service/add'),
+          await http.post(Uri.parse(ApiConfig.baseUrl + '/service/add'),
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer $token',

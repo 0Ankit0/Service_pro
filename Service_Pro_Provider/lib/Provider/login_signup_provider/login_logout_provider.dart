@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class LoginLogoutProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -20,7 +21,7 @@ class LoginLogoutProvider with ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse('http://20.52.185.247:8000/user/login'),
+        Uri.parse(ApiConfig.baseUrl + '/user/login'),
         body: jsonEncode({
           'Email': email,
           'Password': password,
