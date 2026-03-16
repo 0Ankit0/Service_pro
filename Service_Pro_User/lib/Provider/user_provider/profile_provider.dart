@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class ProfileProvider with ChangeNotifier {
   String _userId = '';
@@ -18,7 +19,7 @@ class ProfileProvider with ChangeNotifier {
         print('Token is null');
       } else {
         final response = await http
-            .get(Uri.parse('http://20.52.185.247:8000/user/profile'), headers: {
+            .get(Uri.parse(ApiConfig.baseUrl + '/user/profile'), headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         });

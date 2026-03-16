@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class SearchService with ChangeNotifier {
   String searchText = '';
@@ -13,7 +14,7 @@ class SearchService with ChangeNotifier {
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     this.searchText =
         searchText; // Correctly set the class's searchText property
-    final url = 'http://20.52.185.247:8000/service/search/$searchText/';
+    final url = ApiConfig.baseUrl + '/service/search/$searchText/';
     try {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',

@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:service_pro_user/core/api_config.dart';
 
 class ResetPassword with ChangeNotifier {
   Future<void> resetPassword(String email) async {
     try {
       final response = await http.post(
-        Uri.parse('http://20.52.185.247:8000/mail/send/resetPassword'),
+        Uri.parse(ApiConfig.baseUrl + '/mail/send/resetPassword'),
         headers: {
           'Content-Type': 'application/json',
         },

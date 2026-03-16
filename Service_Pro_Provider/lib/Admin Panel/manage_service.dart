@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:service_pro_provider/Provider/service_provider/put_service_provider.dart';
 import 'package:service_pro_provider/Provider/service_provider/service_provider.dart';
 import 'dart:io';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class ManageService extends StatefulWidget {
   const ManageService({super.key});
@@ -246,7 +247,7 @@ class _ManageServiceState extends State<ManageService> {
                   : Colors.blue.withOpacity(0.5);
 
               String image = categoryItem['Image'].toString();
-              image = image.replaceFirst('localhost', '20.52.185.247');
+              image = ApiConfig.normalizeMediaUrl(image);
               return Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Container(

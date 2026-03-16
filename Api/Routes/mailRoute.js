@@ -9,6 +9,7 @@ import { User } from "../Modals/users.js";
 dotenv.config();
 
 const mailRouter = Router();
+const publicBaseUrl = (process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 8000}`).replace(/\/$/, "");
 
 const auth = {
   auth: {
@@ -385,7 +386,7 @@ Just ignore this email the way your cat ignores&nbsp;you.</td>
 
 mailRouter.post("/send/welcome", protect, async (req, res) => {
   try {
-    const link = `http://20.52.185.247:8000/user/verifyAccount?id=${req.body.id}`;
+    const link = `${publicBaseUrl}/user/verifyAccount?id=${req.body.id}`;
     const { Email } = req.body;
 
     const mailOptions = {
@@ -418,7 +419,7 @@ mailRouter.post("/send/resetPassword", async (req, res) => {
     const { Email } = req.body;
     try {
       const user = await User.find({ Email: Email });
-      const link = `http://20.52.185.247:8000/user/resetPassword?id=${user[0]._id}`;
+      const link = `${publicBaseUrl}/user/resetPassword?id=${user[0]._id}`;
       // const Code = await generateUniqueCode();
       const mailOptions = {
         from: "serviceapp@ankitpdl.me", // replace with your email

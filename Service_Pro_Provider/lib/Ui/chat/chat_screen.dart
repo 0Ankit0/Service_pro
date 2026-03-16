@@ -5,6 +5,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:service_pro_provider/core/api_config.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
@@ -32,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _connectSocket() async {
     final token = await AuthService().getToken();
     if (token != null) {
-      socket = IO.io('http://20.52.185.247:8000', <String, dynamic>{
+      socket = IO.io(ApiConfig.baseUrl, <String, dynamic>{
         'transports': ['websocket'],
         'query': {'token': token},
       });
@@ -61,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/message'),
+      Uri.parse(ApiConfig.baseUrl + '/message'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

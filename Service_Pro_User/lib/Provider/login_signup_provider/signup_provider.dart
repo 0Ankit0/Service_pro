@@ -5,6 +5,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class SignUpProvider with ChangeNotifier {
   Future<void> signUp(
@@ -16,7 +17,7 @@ class SignUpProvider with ChangeNotifier {
     String imageUrl,
   ) async {
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/user/signup'),
+      Uri.parse(ApiConfig.baseUrl + '/user/signup'),
       headers: {"Content-Type": "application/json"},
       body: json.encode({
         'Name': name,
@@ -43,7 +44,7 @@ class SignUpProvider with ChangeNotifier {
         .userId
         .toString();
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/mail/send/welcome'),
+      Uri.parse(ApiConfig.baseUrl + '/mail/send/welcome'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer $token',
@@ -65,7 +66,7 @@ class SignUpProvider with ChangeNotifier {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://20.52.185.247:8000/upload/file'),
+        Uri.parse(ApiConfig.baseUrl + '/upload/file'),
       );
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
       final response = await request.send();

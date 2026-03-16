@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:service_pro_user/Provider/login_signup_provider/login_logout_provider.dart';
+import 'package:service_pro_user/core/api_config.dart';
 
 class UserSearchProvider with ChangeNotifier {
   String searchText = '';
@@ -13,7 +14,7 @@ class UserSearchProvider with ChangeNotifier {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.get(
-        Uri.parse('http://20.52.185.247:8000/user/search/$searchText'),
+        Uri.parse(ApiConfig.baseUrl + '/user/search/$searchText'),
         headers: {
           'Content-Type': 'application/json', // Fixed Content-Type header value
           'Authorization': 'Bearer $token'

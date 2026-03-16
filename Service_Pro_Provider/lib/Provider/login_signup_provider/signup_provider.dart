@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:service_pro_provider/core/api_config.dart';
 
 class SignUpProvider with ChangeNotifier {
   Future<void> signUp(
@@ -16,7 +17,7 @@ class SignUpProvider with ChangeNotifier {
     List services,
   ) async {
     final response = await http.post(
-      Uri.parse('http://20.52.185.247:8000/user/signup'),
+      Uri.parse(ApiConfig.baseUrl + '/user/signup'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -43,7 +44,7 @@ class SignUpProvider with ChangeNotifier {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://20.52.185.247:8000/upload/file'),
+        Uri.parse(ApiConfig.baseUrl + '/upload/file'),
       );
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
       final response = await request.send();

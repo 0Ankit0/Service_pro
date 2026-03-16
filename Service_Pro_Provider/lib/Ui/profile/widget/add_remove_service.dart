@@ -4,6 +4,7 @@ import 'package:service_pro_provider/Provider/service_provider/service_provider.
 import 'package:service_pro_provider/Provider/login_signup_provider/login_logout_provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:service_pro_provider/core/api_config.dart';
 
 class AddRemoveService extends StatefulWidget {
   final List<String> selectedServiceIds;
@@ -40,7 +41,7 @@ class _AddRemoveServiceState extends State<AddRemoveService> {
     final token =
         Provider.of<LoginLogoutProvider>(context, listen: false).token;
     final response = await http.put(
-      Uri.parse('http://20.52.185.247:8000/user/profile'),
+      Uri.parse(ApiConfig.baseUrl + '/user/profile'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -106,10 +107,12 @@ class _AddRemoveServiceState extends State<AddRemoveService> {
               itemCount: serviceProvider.service.length,
               itemBuilder: (context, index) {
                 final service = serviceProvider.service[index];
-                final image = service['Image']
-                        ?.toString()
-                        .replaceAll('localhost', '20.52.185.247') ??
-                    'https://via.placeholder.com/150';
+                final rawImage = service['Image']?.toString();
+                final normalizedImage = ApiConfig.normalizeMediaUrl(rawImage);
+                final image = normalizedImage.isEmpty
+                    ? 'https://via.placeholder.com/150'
+                    : normalizedImage;
+
                 return ListTile(
                   title: Text(service['Name'].toString()),
                   subtitle: Text(service['Description'].toString()),

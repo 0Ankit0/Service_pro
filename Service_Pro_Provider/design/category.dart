@@ -56,7 +56,7 @@
 //                   itemBuilder: (context, index) {
 //                     final categoryData = categories[index];
 //                     String image = categoryData.Image;
-//                     image = image.replaceFirst('localhost', '10.0.2.2');
+//                     image = image.replaceFirst('localhost', 'localhost');
 //                     return GestureDetector(
 //                       onTap: () {
 //                         Navigator.push(
